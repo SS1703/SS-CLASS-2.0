@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#070609">
+<meta name="theme-color" content="#faf6ea">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,17 +13,17 @@
 <meta name="description" content="SS Class 2.0 - live classes, recorded lectures, study material and fee tracking.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap">
 <style>
-:root{color-scheme:dark;--bg:#070609;--card:#151217;--card2:#0c0b0e;--tx:#f5eedc;--mu:#a39a84;--ac:#e9c46a;--bd:rgba(233,196,106,.14);--bd2:rgba(233,196,106,.34);--inp:#0e0c11;--g1:#fff3c4;--g2:#e6b94f;--g3:#a8761a;--on:#1b1306;--glow:rgba(230,185,79,.16);--bar:rgba(7,6,9,.78);--ph:#6d665a;--ls:rgba(230,185,79,.28);--ok:#7fd8a4;--bad:#ff8a7a;
---gold:linear-gradient(135deg,#fff3c4 0%,#e6b94f 38%,#b8831f 64%,#f3d27a 100%);
---goldtext:linear-gradient(100deg,#b8831f 0%,#fff3c4 22%,#e6b94f 42%,#a8761a 58%,#f3d27a 78%,#e6b94f 100%);
---hair:linear-gradient(145deg,rgba(243,210,122,.6),rgba(243,210,122,.07) 34%,rgba(243,210,122,.04) 66%,rgba(243,210,122,.42));
---sh:0 1px 0 rgba(255,255,255,.05) inset,0 22px 44px -22px rgba(0,0,0,.9);
+:root{color-scheme:light;--bg:#fbf8f1;--card:#ffffff;--card2:#faf6ec;--tx:#1d2330;--mu:#6a6252;--ac:#8f5f12;--bd:rgba(72,54,22,.13);--bd2:rgba(72,54,22,.22);--inp:#ffffff;--g1:#f6e7b8;--g2:#c9952f;--g3:#8a5d12;--on:#1d1608;--glow:rgba(201,149,47,.18);--bar:rgba(255,255,255,.92);--ph:#a39c8a;--ls:rgba(201,149,47,.32);--ok:#2e7d5b;--bad:#b3412e;
+--gold:linear-gradient(135deg,#e9bf62 0%,#c9952f 100%);
+--goldtext:linear-gradient(100deg,#1d2330 0%,#3a4560 50%,#1d2330 100%);
+--hair:linear-gradient(145deg,rgba(201,149,47,.5),rgba(201,149,47,.08) 40%,rgba(201,149,47,.06) 70%,rgba(201,149,47,.35));
+--sh:0 1px 0 rgba(255,255,255,.9) inset,0 14px 30px -20px rgba(72,54,22,.25);
 --serif:'Fraunces','Hind Siliguri',Georgia,serif;--sans:'Manrope','Hind Siliguri',system-ui,-apple-system,'Segoe UI',sans-serif;--r:20px;--ease:cubic-bezier(.2,.7,.2,1)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--bg)}
 body{margin:0;min-height:100vh;min-height:100dvh;color:var(--tx);font-family:var(--sans);font-size:15px;line-height:1.55;background:transparent;overscroll-behavior-y:contain;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(720px 400px at 50% -140px,rgba(230,185,79,.24),transparent 70%),radial-gradient(520px 420px at 115% 35%,rgba(168,118,26,.11),transparent 70%),radial-gradient(520px 420px at -15% 85%,rgba(168,118,26,.09),transparent 70%)}
-body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(900px 480px at 50% -180px,rgba(201,149,47,.12),transparent 70%)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 ::selection{background:rgba(230,185,79,.35)}
 .w{max-width:720px;margin:0 auto;padding:16px max(18px,env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
 #home{padding-top:env(safe-area-inset-top)}
@@ -46,7 +46,7 @@ a{color:var(--ac);text-decoration:none}
 /* hero */
 .hero{text-align:center;padding:30px 0 22px;position:relative}
 .hero::before{content:"";position:absolute;left:50%;top:max(110px,22vw);width:min(300px,72vw);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(230,185,79,.28),transparent 62%);transform:translate(-50%,-50%);animation:halo 6s ease-in-out infinite;z-index:-1;pointer-events:none}
-.hero .logo{width:clamp(130px,44vw,190px);height:auto;aspect-ratio:1;object-fit:contain;display:block;margin:0 auto 10px;filter:drop-shadow(0 16px 36px rgba(230,185,79,.38));animation:float 6s ease-in-out infinite}
+.hero .logo{width:clamp(130px,44vw,190px);height:auto;aspect-ratio:1;object-fit:contain;display:block;margin:0 auto 10px;filter:drop-shadow(0 14px 28px rgba(110,74,12,.35)) drop-shadow(0 2px 4px rgba(110,74,12,.25));animation:float 6s ease-in-out infinite}
 .hero h1{font-size:clamp(2.3rem,11vw,3.3rem);margin:0 0 14px;background:var(--goldtext);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite}
 .hero p{font-size:.98rem;max-width:400px;margin:16px auto 0}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid var(--bd2);border-radius:99px;font:700 .66rem var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ac);background:rgba(230,185,79,.06)}
@@ -57,8 +57,8 @@ a{color:var(--ac);text-decoration:none}
 .g>.c{text-align:center;font-weight:600;padding:18px 10px 14px}
 .g>.c:hover{transform:translateY(-4px);box-shadow:var(--sh),0 18px 40px -20px rgba(230,185,79,.45)}
 .g>.c h3{font-size:.88rem;margin:10px 0 0;color:var(--tx)}
-.feat .ic{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:14px;color:var(--ac);background:radial-gradient(circle at 30% 20%,rgba(255,243,196,.16),rgba(230,185,79,.05)) padding-box,var(--hair) border-box;border:1px solid transparent}
-.feat .ic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.feat .ic{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:14px;color:#8a5d12;background:#fbf1d6 padding-box,var(--hair) border-box;border:1px solid transparent}
+.feat .ic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .login{margin-top:18px;padding:22px 18px 14px}
 .login h2{margin:0}
 .login .sub{margin:2px 0 4px;font-size:.9rem}
@@ -66,27 +66,27 @@ a{color:var(--ac);text-decoration:none}
 .c.row .mu,.row .mu{font-size:.82rem}
 .c.row>div:first-child b{font-size:.98rem}
 /* forms */
-input,select{width:100%;min-height:50px;padding:13px 15px;margin:6px 0;border-radius:14px;border:1px solid var(--bd);background-color:var(--inp);color:var(--tx);font:inherit;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.4) inset;transition:border-color .2s,box-shadow .2s}
+input,select{width:100%;min-height:50px;padding:13px 15px;margin:6px 0;border-radius:14px;border:1px solid var(--bd);background-color:var(--inp);color:var(--tx);font:inherit;font-size:16px;box-shadow:0 1px 3px rgba(120,88,28,.08) inset;transition:border-color .2s,box-shadow .2s}
 input::placeholder{color:var(--ph)}
-input:focus,select:focus{outline:none;border-color:var(--g2);box-shadow:0 2px 8px rgba(0,0,0,.4) inset,0 0 0 4px var(--ls)}
-select{-webkit-appearance:none;appearance:none;padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23e6b94f' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+input:focus,select:focus{outline:none;border-color:var(--g2);box-shadow:0 1px 3px rgba(120,88,28,.08) inset,0 0 0 4px var(--ls)}
+select{-webkit-appearance:none;appearance:none;padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a8761a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
 input[type=file]{padding:9px;font-size:.85rem;color:var(--mu)}
 input[type=file]::file-selector-button{margin-right:12px;border:1px solid var(--bd2);background:rgba(230,185,79,.08);color:var(--ac);border-radius:10px;padding:8px 14px;font:700 .82rem var(--sans);cursor:pointer}
 /* buttons */
-button{position:relative;overflow:hidden;min-height:46px;background:var(--gold);color:var(--on);border:0;border-radius:14px;padding:11px 20px;font-family:var(--sans);font-weight:800;font-size:.9rem;letter-spacing:.02em;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.55) inset,0 -1px 0 rgba(0,0,0,.22) inset,0 12px 26px -12px rgba(230,185,79,.7);transition:transform .15s,box-shadow .25s,opacity .2s}
+button{position:relative;overflow:hidden;min-height:46px;background:var(--gold);color:var(--on);border:0;border-radius:14px;padding:11px 20px;font-family:var(--sans);font-weight:800;font-size:.9rem;letter-spacing:.02em;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.55) inset,0 -1px 0 rgba(0,0,0,.22) inset,0 12px 26px -12px rgba(184,131,31,.5);transition:transform .15s,box-shadow .25s,opacity .2s}
 button::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%);transform:translateX(-130%);transition:transform .8s var(--ease);pointer-events:none}
 button:hover::after{transform:translateX(130%)}
 button:active{transform:scale(.97)}
 button:focus-visible{outline:2px solid var(--g1);outline-offset:2px}
 #fS>button,#fT>button,.login button:not(.tabs button){width:100%;margin-top:8px}
-button.s,.tabs button:not(.on){background:rgba(255,255,255,.03);color:var(--tx);border:1px solid var(--bd2);box-shadow:none;font-weight:700}
+button.s,.tabs button:not(.on){background:rgba(255,255,255,.7);color:var(--tx);border:1px solid var(--bd2);box-shadow:none;font-weight:700}
 button.s::after,.tabs button:not(.on)::after{display:none}
 button.s:hover{border-color:var(--g2);color:var(--ac)}
 .c.row button,.row span>button,.row a>button{min-height:40px;padding:8px 16px;font-size:.84rem;border-radius:12px}
 /* tabs as a segmented control */
-.tabs{display:flex;gap:4px;overflow-x:auto;margin:14px 0;padding:4px;border-radius:999px;background:rgba(255,255,255,.025);border:1px solid var(--bd);box-shadow:0 2px 10px rgba(0,0,0,.35) inset;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs{display:flex;gap:4px;overflow-x:auto;margin:14px 0;padding:4px;border-radius:999px;background:rgba(120,88,28,.05);border:1px solid var(--bd);box-shadow:0 2px 8px rgba(120,88,28,.1) inset;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .tabs::-webkit-scrollbar{display:none}
-.tabs button{flex:1 0 auto;white-space:nowrap;min-height:40px;border-radius:999px;padding:8px 13px;font-size:.84rem}
+.tabs button{flex:1 1 0;min-width:max-content;white-space:nowrap;min-height:40px;border-radius:999px;padding:8px 13px;font-size:.84rem}
 .tabs button:not(.on){border:0;color:var(--mu);background:transparent}
 .tabs button:not(.on):hover{color:var(--tx)}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
@@ -94,14 +94,14 @@ button.s:hover{border-color:var(--g2);color:var(--ac)}
 summary{cursor:pointer;list-style:none}summary::-webkit-details-marker{display:none}
 details.c>summary{display:flex;align-items:center;justify-content:space-between;gap:10px}
 details.c>summary b{font-size:.98rem}
-details.c>summary::after{content:"";flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--bd2);background:rgba(230,185,79,.07) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23e6b94f' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") center no-repeat;transition:transform .35s var(--ease)}
+details.c>summary::after{content:"";flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--bd2);background:rgba(230,185,79,.07) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a8761a' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") center no-repeat;transition:transform .35s var(--ease)}
 details.c[open]>summary{margin-bottom:10px}
 details.c[open]>summary::after{transform:rotate(45deg)}
 details.c[open]{box-shadow:var(--sh),0 0 0 1px rgba(230,185,79,.2),0 20px 50px -24px rgba(230,185,79,.4)}
 details.c>button{width:100%;margin-top:8px}
 /* top bar */
 .bar{position:sticky;top:0;z-index:5;background:var(--bar);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border-bottom:1px solid;border-image:linear-gradient(90deg,transparent,rgba(233,196,106,.5),transparent) 1;padding:calc(10px + env(safe-area-inset-top)) 0 10px;margin:0 calc(-1*max(18px,env(safe-area-inset-right))) 0 calc(-1*max(18px,env(safe-area-inset-left)));padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right))}
-.bar img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(230,185,79,.35))}
+.bar img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 3px 6px rgba(110,74,12,.35))}
 .bar h3{font-family:var(--serif);font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
 .bar button.s{min-height:38px;padding:7px 14px;font-size:.82rem;border-radius:999px}
 #view h2{font-family:var(--serif);letter-spacing:-.02em}
@@ -139,8 +139,8 @@ details.c>button{width:100%;margin-top:8px}
  .g>.c.feat h3,.feat h3{font-size:.72rem;line-height:1.25;margin-top:8px}
  /* bottom navigation */
  #app{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
- #tabs{position:fixed;z-index:6;left:0;right:0;bottom:0;margin:0;gap:2px;overflow:visible;border:0;border-top:1px solid var(--bd2);border-radius:22px 22px 0 0;padding:6px max(8px,env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-right));background:rgba(10,9,12,.92);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);box-shadow:0 -16px 34px -12px rgba(0,0,0,.85)}
- #tabs button{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;padding:6px 2px 4px;border:0;border-radius:14px;overflow:visible;background:transparent;color:var(--mu);box-shadow:none;font-size:.68rem;font-weight:700;letter-spacing:.02em}
+ #tabs{position:fixed;z-index:6;left:0;right:0;bottom:0;margin:0;gap:2px;overflow:visible;border:0;border-top:1px solid var(--bd2);border-radius:22px 22px 0 0;padding:6px max(8px,env(safe-area-inset-left)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-right));background:rgba(250,246,234,.95);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);box-shadow:0 -16px 34px -12px rgba(0,0,0,.85)}
+ #tabs button{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;padding:6px 2px 4px;border:0;border-radius:14px;overflow:visible;background:transparent;color:#5e5238;box-shadow:none;font-size:.68rem;font-weight:700;letter-spacing:.02em}
  #tabs button::before{content:"";width:22px;height:22px;background-color:currentColor;-webkit-mask:var(--i) center/22px no-repeat;mask:var(--i) center/22px no-repeat}
  #tabs button::after{display:none}
  #tabs button.on{color:var(--ac);background:radial-gradient(34px 22px at 50% 17px,rgba(230,185,79,.24),transparent 100%)}
@@ -156,6 +156,31 @@ details.c>button{width:100%;margin-top:8px}
 .c .g{grid-template-columns:1fr 1fr;gap:8px}
 .c .g>a:first-child{grid-column:1/-1}
 @media (max-width:640px){#view{padding-top:14px}.c>button{width:100%}}
+
+/* ===== colour system: ivory base, ink-navy bar and nav, gold accents ===== */
+.bar{background:#1d2330;border-bottom:0;box-shadow:0 10px 24px -18px rgba(29,35,48,.7)}
+.bar h3{color:#fbf8f1}
+.bar button.s{color:#e9bf62;border-color:rgba(233,191,98,.5);background:transparent}
+.bar button.s:hover{color:#ffffff;border-color:#e9bf62}
+.c:not(.row):not(.login)::before{content:"";position:absolute;left:20px;right:20px;top:0;height:2px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,#c9952f,#e9bf62);opacity:.85}
+.login{box-shadow:var(--sh),0 24px 50px -34px rgba(72,54,22,.35)}
+.login h2{background:none;color:var(--tx);-webkit-text-fill-color:var(--tx)}
+.tabs{background:#f1eadb;border:1px solid var(--bd);box-shadow:none}
+.tabs button.on{background:#1d2330;color:#fbf8f1;box-shadow:0 6px 14px -8px rgba(29,35,48,.6)}
+button.s{background:#ffffff;color:var(--tx);border:1px solid var(--bd2)}
+button.s:hover{border-color:var(--g2);color:var(--ac)}
+@media (max-width:640px){
+ #tabs{background:#fffdf8;border-top:1px solid var(--bd);box-shadow:0 -10px 26px -18px rgba(72,54,22,.3)}
+ #tabs button{color:#7d7561}
+ #tabs button.on{color:#1d2330;background:radial-gradient(34px 22px at 50% 17px,rgba(201,149,47,.22),transparent 100%)}
+ #tabs button.on::after{background:linear-gradient(90deg,#c9952f,#e9bf62)}
+}
+
+/* ===== app option grids ===== */
+.upi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.upi-grid>a{display:block;min-width:0}
+.upi-grid button{margin:0;min-height:48px;padding:10px 8px;font-size:.84rem;white-space:normal;line-height:1.25}
+@media (max-width:360px){.upi-grid{grid-template-columns:1fr}}
 </style></head><body><div class="w">
 
 <div id="home">
@@ -186,6 +211,7 @@ details.c>button{width:100%;margin-top:8px}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
 /* ===== 1. PASTE YOUR FIREBASE CONFIG HERE (see SETUP.md) ===== */
 var CFG={apiKey:"AIzaSyDOpTWEgKJm6VFU5T-6ZvK18ap0eq5NQQU",authDomain:"ssclass-17.firebaseapp.com",projectId:"ssclass-17",storageBucket:"ssclass-17.firebasestorage.app",messagingSenderId:"1063885770580",appId:"1:1063885770580:web:e81ebfbcee33e24a3a42c1"};
@@ -228,10 +254,19 @@ function sLogin(){var id=$('sid').value.trim().toLowerCase(),pw=$('spw').value;m
  auth.signInWithEmailAndPassword(id+DOM,pw).catch(function(e){msg(authMsg(e,'s'))})}
 function tLogin(){var e=$('temail').value.trim(),pw=$('tpw').value;msg('');
  auth.signInWithEmailAndPassword(e,pw).catch(function(e){msg(authMsg(e,'t'))})}
+function verifyBanner(u){
+ var old=$('vbn'); if(old)old.remove();
+ if(!u||u.emailVerified)return;
+ var b=document.createElement('div');b.id='vbn';b.className='c';b.style.margin='12px 0';
+ b.innerHTML='<b>Teacher email verify kora nei</b><p class="mu" style="margin:6px 0">Student add korar age email verify korte hobe. Inbox ar Spam dekho.</p><button id="vsend">Verification mail pathao</button><button class="s" id="vchk">Ami verify korechi</button>';
+ $('app').insertBefore(b,$('tabs'));
+ $('vsend').onclick=function(){u.sendEmailVerification().then(function(){alert('Mail pathano hoyeche. Link e click kore "Ami verify korechi" chap.')}).catch(function(e){alert('Mail pathano jay nai: '+(e.message||e))})};
+ $('vchk').onclick=function(){var c=auth.currentUser;c.reload().then(function(){return c.getIdToken(true)}).then(function(){if(auth.currentUser.emailVerified){verifyBanner(auth.currentUser);alert('Verified! Ekhon student add korte parben.')}else alert('Ekhono verify hoyni. Link e click korechen?')}).catch(function(e){alert('Check fail: '+(e.message||e))})};
+}
 auth.onAuthStateChanged(function(u){
  if(!u){stopAll();me=null;isT=false;['sid','spw','temail','tpw'].forEach(function(i){$(i).value=''});$('app').classList.add('hide');$('home').classList.remove('hide');return}
  var em=(u.email||'').toLowerCase();
- if(em===TEACHER.toLowerCase()){isT=true;me={name:'Teacher'};['students','pay','ok','dues','settings'].forEach(function(k){listen(k)});['live','rec','mat'].forEach(function(k){CLASSES.forEach(function(c){listenC(k,c)})});start();return}
+ if(em===TEACHER.toLowerCase()){isT=true;me={name:'Teacher'};['students','pay','ok','dues','settings'].forEach(function(k){listen(k)});['live','rec','mat'].forEach(function(k){CLASSES.forEach(function(c){listenC(k,c)})});verifyBanner(u);start();return}
  if(!em.endsWith(DOM)){auth.signOut();msg('Account not found.');return}
  var id=em.split('@')[0].toUpperCase();
  fs.collection('students').doc(id).get().then(function(d){
@@ -278,6 +313,7 @@ async function add(col,keys){
  if(o.link&&!/^https?:\/\//i.test(o.link)){alert('Link must start with https://');return}
  try{
   if(col==='students'){
+    if(!auth.currentUser||!auth.currentUser.emailVerified){alert('Teacher email verify kora nei. Verify kore abar login koro.');return}
     var fn=(o.name.split(/\s+/)[0]||'').toUpperCase().replace(/[^A-Z0-9]/g,''),yr=String(o.byear).trim(),ph=String(o.ph).replace(/\D/g,'');
     if(!fn){alert('Write the name in English letters (A-Z) so an ID can be made.');return}
     if(!/^(19|20)\d{2}$/.test(yr)){alert('Enter a 4 digit birth year, like 2008');return}
@@ -296,19 +332,83 @@ async function add(col,keys){
     alert('Student added.\nID: '+id+'\nPassword: '+pw+'\n\nTap Send login on the student card to send it.')}
   else await fs.collection('classes').doc(o.cls).collection(col).doc('d'+o.ts).set(o)
  }catch(e){alert('Could not save: '+(e.message||e))}}
+async function pickContact(){
+ if(!('contacts' in navigator)||!navigator.contacts.select){alert('Ei phone/browser-e contact picker nei (Android Chrome e kaaj kore). Naam ar number hath diye likhun.');return}
+ try{
+  var r=await navigator.contacts.select(['name','tel'],{multiple:false});
+  if(!r||!r.length)return;
+  var c=r[0];
+  if(c.name&&c.name[0])$('f_name').value=c.name[0];
+  if(c.tel&&c.tel[0])$('f_ph').value=String(c.tel[0]).replace(/\D/g,'').slice(-10);
+ }catch(e){if(e.name!=='AbortError')alert('Contact nite parlam na: '+(e.message||e))}
+}
+function receiptOf(k){
+ var sid=sidOf(k),s=S.students.find(function(x){return x._id===sid});
+ var it=s?items(s).find(function(x){return x.k===k}):null;
+ var ok=S.ok.find(function(x){return x._id===k});
+ if(!s||!it||!ok){alert('Receipt pawa jay nai');return}
+ var rn='SS-'+k.replace(/[^A-Za-z0-9]+/g,'-').toUpperCase()+'-'+String(ok.ts).slice(-5);
+ var when=new Date(ok.ts).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+ var lg=document.querySelector('.hero .logo'),logo=lg?lg.src:'';
+ var rcv=(cfg().name||'SS Class');
+ var html='<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Receipt '+esc(rn)+'</title><style>'+
+ 'body{font-family:Arial,"Hind Siliguri",sans-serif;background:#faf6ea;color:#1f1709;margin:0;padding:24px}'+
+ '.r{max-width:560px;margin:auto;background:#fffdf8;border:1px solid #d9c9a3;border-radius:16px;padding:28px;box-shadow:0 10px 30px -18px rgba(120,88,28,.4)}'+
+ '.hd{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #c58f25;padding-bottom:14px}'+
+ '.hd img{width:64px;height:64px;object-fit:contain}.t{font-size:22px;font-weight:700;letter-spacing:.04em;color:#6e4a0c}'+
+ '.badge{display:inline-block;background:#2e7d52;color:#fff;border-radius:99px;padding:4px 14px;font-size:13px;font-weight:700;margin-top:6px}'+
+ 'table{width:100%;border-collapse:collapse;margin-top:18px}td{padding:10px 4px;border-bottom:1px solid #eadfc4}td:last-child{text-align:right;font-weight:700}'+
+ '.tot td{font-size:18px;border-bottom:0;color:#6e4a0c}.ft{margin-top:22px;font-size:12px;color:#7d7257;text-align:center}'+
+ '.np{text-align:center;margin-top:18px}.np button{background:#c58f25;color:#1b1306;border:0;border-radius:12px;padding:12px 22px;font-weight:700;cursor:pointer}'+
+ '@media print{.np{display:none}body{background:#fff;padding:0}.r{box-shadow:none;border-color:#ccc}}</style></head><body><div class="r">'+
+ '<div class="hd"><div><div class="t">PAYMENT RECEIPT</div><div class="badge">PAID</div></div>'+(logo?'<img src="'+logo+'" alt="">':'')+'</div>'+
+ '<table>'+
+ '<tr><td>Receipt no.</td><td>'+esc(rn)+'</td></tr>'+
+ '<tr><td>Date</td><td>'+esc(when)+'</td></tr>'+
+ '<tr><td>Student</td><td>'+esc(s.name)+'</td></tr>'+
+ '<tr><td>Student ID</td><td>'+esc(s._id)+'</td></tr>'+
+ '<tr><td>Class</td><td>'+esc(s.cls)+'</td></tr>'+
+ '<tr><td>Payment for</td><td>'+esc(it.t)+'</td></tr>'+
+ '<tr class="tot"><td>Amount paid</td><td>Rs '+esc(it.a)+'</td></tr>'+
+ '</table>'+
+ '<div class="ft">Received by '+esc(rcv)+'<br>This is a computer generated receipt.</div>'+
+ '</div><div class="np"><button onclick="window.print()">Print / Save as PDF</button></div></body></html>';
+ var w=window.open('','_blank');
+ if(!w){alert('Popup block ho gechhe. Browser-e popup allow koro.');return}
+ w.document.write(html);w.document.close();
+}
+function upiPayBlock(i){
+ if(!upiId())return '<p class="mu">Teacher has not set a UPI ID yet.</p>';
+ var q='pa='+encodeURIComponent(upiId())+'&pn='+encodeURIComponent(upiName()||'Teacher')+'&am='+encodeURIComponent(i.a)+'&cu=INR&tn='+encodeURIComponent(i.t+' '+me._id);
+ return '<p class="mu">Amount ₹'+i.a+' automatic bhora thakbe. Phone-e tap korun ba QR scan korun.</p>'+
+ '<div class="upi-grid"><a href="upi://pay?'+q+'"><button style="width:100%">Any UPI app</button></a>'+
+ '<a href="phonepe://pay?'+q+'"><button class="s" style="width:100%">PhonePe</button></a>'+
+ '<a href="tez://upi/pay?'+q+'"><button class="s" style="width:100%">Google Pay</button></a>'+
+ '<a href="upi://pay?'+q+'"><button class="s" style="width:100%">Amazon Pay / BHIM / others</button></a></div>'+
+ upiQr(i.a)+
+ '<button style="width:100%;margin-top:8px" onclick="payOne(\''+i.k+'\')">I have paid ₹'+i.a+'</button>';
+}
+async function payOne(k){try{await fs.collection('pay').doc(k).set({sid:me._id,name:me.name,ts:Date.now()});alert('Thanks! Teacher confirm korbe.')}catch(e){alert('Could not save')}}
 function cfg(){return S.settings.find(function(x){return x._id==='upi'})||{}}
-function upiId(){return cfg().id||''}
-function upiName(){return cfg().name||''}
+function upiId(){return cfg().id||'sangiri.subhadip@ybl'}
+function upiName(){return cfg().name||'SUBHADIP SANGIRI'}
 async function saveUpi(){var id=$('upi').value.trim(),n=$('upin').value.trim();
  if(!/^[\w.\-]{2,}@[\w]{2,}$/.test(id)){alert('Enter a valid UPI ID like name@okhdfcbank');return}
  try{await fs.collection('settings').doc('upi').set({id:id,name:n||'Teacher'});alert('Saved')}catch(e){alert('Could not save')}}
+function upiQr(amt){
+ if(typeof qrcode!=='function'||!upiId())return '';
+ var link='upi://pay?pa='+encodeURIComponent(upiId())+'&pn='+encodeURIComponent(upiName()||'Teacher')+(amt?'&am='+encodeURIComponent(amt):'')+'&cu=INR';
+ var q=qrcode(0,'M');q.addData(link);q.make();
+ return '<div style="text-align:center;margin:14px 0 4px"><img alt="UPI QR" src="'+q.createDataURL(6,8)+'" style="width:200px;max-width:70%;background:#fff;border-radius:14px;padding:6px"><div class="mu" style="font-size:.82rem;margin-top:6px">QR scan korun: '+esc(upiId())+'</div></div>';
+}
 function upiBtns(amt){
  if(!upiId())return '<p class="mu">Teacher has not set a UPI ID yet.</p>';
  var m=curM(),q='pa='+encodeURIComponent(upiId())+'&pn='+encodeURIComponent(upiName()||'Teacher')+'&am='+encodeURIComponent(amt)+'&cu=INR&tn='+encodeURIComponent('Fee '+m+' '+me._id);
- return '<p class="mu">Tap an app. Amount and UPI ID fill in automatically. After paying, tap "I have paid".</p><div class="g">'+
+ return '<p class="mu">Phone-e tap korun. Amount ar UPI ID automatic bhore jabe. After paying, tap "I have paid".</p><div class="g">'+
  '<a href="upi://pay?'+q+'"><button style="width:100%">Any UPI app</button></a>'+
  '<a href="phonepe://pay?'+q+'"><button class="s" style="width:100%">PhonePe</button></a>'+
- '<a href="tez://upi/pay?'+q+'"><button class="s" style="width:100%">Google Pay</button></a></div><br>'}
+ '<a href="tez://upi/pay?'+q+'"><button class="s" style="width:100%">Google Pay</button></a>'+
+ '<a href="upi://pay?'+q+'"><button class="s" style="width:100%">Amazon Pay / BHIM / others</button></a></div>'+upiQr(amt)+'<br>'}
 function hasOk(k){return S.ok.some(function(x){return x._id===k})}
 function sidOf(k){if(k.indexOf('due_')===0){var d=S.dues.find(function(x){return 'due_'+x._id===k});return d?d.sid:''}return k.split('_')[0]}
 async function okPay(k){try{await fs.collection('ok').doc(k).set({sid:sidOf(k),ts:Date.now()})}catch(e){alert('Could not confirm')}}
@@ -390,10 +490,10 @@ function feeView(){var h='';
  if(!isT){
   var it=items(me).sort(function(a,b){var pa=st(a.k)<2,pb=st(b.k)<2;if(pa!==pb)return pa?-1:1;return pa?(a.sk<b.sk?-1:1):(a.sk<b.sk?1:-1)}),due=it.filter(function(i){return st(i.k)<2}),tot=sum(due),p0=sum(it.filter(function(i){return st(i.k)===0}));
   h+='<div class="c"><div class="mu">Total due</div><h2 style="color:var(--ac);font-size:2rem">₹'+tot+'</h2><div class="mu">'+(due.length?due.length+' pending item(s)':'✅ All clear')+'</div></div>';
-  it.forEach(function(i){h+='<div class="c row" style="margin-top:8px"><div><b>'+esc(i.t)+'</b><br><span class="mu">'+badge(i)+'</span></div><b>₹'+i.a+'</b></div>'});
-  if(p0>0)h+='<div class="c" style="margin-top:12px">'+upiBtns(p0)+'<button onclick="paidAll()">I have paid ₹'+p0+'</button></div>';
+  it.forEach(function(i){h+='<div class="c row" style="margin-top:8px"><div><b>'+esc(i.t)+'</b><br><span class="mu">'+badge(i)+'</span></div><span><b>₹'+i.a+'</b>'+(st(i.k)===2?' <button class="s" onclick="receiptOf(\''+i.k+'\')">Receipt</button>':'')+'</span></div>'});
+  h+=it.filter(function(i){return st(i.k)===0&&i.a>0}).map(function(i){return '<details class="c" style="margin-top:8px"><summary><b>Pay ₹'+i.a+' · '+esc(i.t)+'</b></summary>'+upiPayBlock(i)+'</details>'}).join('');
   return h}
- h+='<div class="c"><b>Your UPI ID (students will pay here)</b><input id="upi" placeholder="name@bank" value="'+qa(upiId())+'"><input id="upin" placeholder="Name shown on payment" value="'+qa(upiName())+'"><button onclick="saveUpi()">Save</button></div>';
+ h+='<div class="c"><b>Your UPI ID (students will pay here)</b><input id="upi" placeholder="name@bank" value="'+qa(upiId())+'"><input id="upin" placeholder="Name shown on payment" value="'+qa(upiName())+'"><button onclick="saveUpi()">Save</button>'+upiQr(0)+'</div>';
  h+='<details class="c" style="margin-top:10px"><summary><b>Add due</b></summary><select id="dsid">'+S.students.map(function(s){return '<option value="'+esc(s._id)+'">'+esc(s.name)+' ('+esc(s._id)+')</option>'}).join('')+'</select><input id="dtitle" placeholder="Reason (e.g. Exam fee)"><input id="damt" type="number" placeholder="Amount (Rs)"><button onclick="addDue()">Add due</button></details>';
  if(!S.students.length)return h+'<p class="mu">Add students first.</p>';
  h+=S.students.map(function(s){var it=items(s),pend=it.filter(function(i){return st(i.k)<2}),done=it.filter(function(i){return st(i.k)===2}),tot=sum(pend);
@@ -401,7 +501,7 @@ function feeView(){var h='';
   return '<div class="c" style="margin-top:10px"><div class="row"><div><b>'+esc(s.name)+'</b> <span class="mu">'+esc(s._id)+'</span></div><b style="color:'+(tot?'var(--ac)':'inherit')+'">₹'+tot+' due</b></div>'+
   pend.map(function(i){var q=st(i.k);return '<div class="row" style="margin-top:8px"><span>'+esc(i.t)+' · ₹'+i.a+'<br><span class="mu">'+(q===1?'🕒 Student says paid':late(i)?'🔴 Overdue':'⏳ Due')+'</span></span><span><button onclick="okPay(\''+i.k+'\')">'+(q===1?'✔ Confirm':'Mark paid')+'</button>'+(q===1?' <button class="s" onclick="rejectPay(\''+i.k+'\')">Reject</button>':'')+(i.id?' <button class="s" onclick="del(\'dues\',\''+i.id+'\')">✕</button>':'')+'</span></div>'}).join('')+
   (tot&&s.wa?'<a href="'+wa+'" target="_blank" rel="noopener"><button class="s" style="margin-top:10px">🔔 Remind</button></a>':'')+
-  (done.length?'<details style="margin-top:10px"><summary class="mu">Paid ('+done.length+')</summary>'+done.map(function(i){return '<div class="row" style="margin-top:6px"><span class="mu">'+esc(i.t)+' · ₹'+i.a+'</span><button class="s" onclick="unok(\''+i.k+'\')">Undo</button></div>'}).join('')+'</details>':'')+'</div>'}).join('');
+  (done.length?'<details style="margin-top:10px"><summary class="mu">Paid ('+done.length+')</summary>'+done.map(function(i){return '<div class="row" style="margin-top:6px"><span class="mu">'+esc(i.t)+' · ₹'+i.a+'</span><span><button class="s" onclick="receiptOf(\''+i.k+'\')">Receipt</button> <button class="s" onclick="unok(\''+i.k+'\')">Undo</button></span></div>'}).join('')+'</details>':'')+'</div>'}).join('');
  return h}
 async function pushToken(){var reg=await navigator.serviceWorker.ready;var t=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});await fs.collection('tokens').doc(me._id).set({sid:me._id,tokens:firebase.firestore.FieldValue.arrayUnion(t),ts:Date.now()},{merge:true})}
 function syncPush(){if(isT||!('Notification' in window)||Notification.permission!=='granted'||/^PASTE/.test(VAPID))return;try{if(firebase.messaging.isSupported())pushToken().catch(function(){})}catch(e){}}
@@ -434,7 +534,7 @@ function render(){
   h+=a.length?a.map(function(x){return '<div class="c row" style="margin-top:8px"><div><b>'+esc(x.title)+'</b><br><span class="mu">'+esc(x.subject)+' · '+esc(x.type||'')+' · Class '+esc(x.cls)+'</span></div><span><a href="'+qa(safe(x.link))+'" target="_blank" rel="noopener"><button>Open</button></a> '+delBtn('mat',x)+'</span></div>'}).join(''):'<p class="mu">No material yet.</p>'}
  if(tab==='fee'){h+=feeView()}
  if(tab==='stu'){
-  h+=form('Add Student',[['name','Student name (English)'],['byear','Birth year (e.g. 2008)','number'],['ph','Phone number (10 digits)','tel'],['fee','Monthly fee (Rs)','number']],'students','<p class="mu">ID = first name + birth year (e.g. RAHUL2008). Password = a random 6 digit number, made automatically.</p>');
+  h+=form('Add Student',[['name','Student name (English)'],['byear','Birth year (e.g. 2008)','number'],['ph','Phone number (10 digits)','tel'],['fee','Monthly fee (Rs)','number']],'students','<button class="s" type="button" onclick="pickContact()">Phone contact theke nin</button><p class="mu">ID = first name + birth year (e.g. RAHUL2008). Password = a random 6 digit number, made automatically.</p>');
   h+=S.students.map(function(s){return '<div class="c" style="margin-top:8px"><div class="row"><div><b>'+esc(s.name)+'</b> <span class="mu">'+esc(s._id)+' · Class '+esc(s.cls)+' · ₹'+esc(s.fee)+(s.pw?' · 🔑 '+esc(s.pw):'')+'</span></div><span>'+(s.pw||s.ph?'<button onclick="sendLogin(\''+s._id+'\')">Send login</button> <button class="s" onclick="sendLogin(\''+s._id+'\',\'sms\')">SMS</button> ':'')+'<button class="s" onclick="delStudent(\''+s._id+'\')">✕</button></span></div>'+dueBlock(s)+'<details style="margin-top:8px"><summary class="mu">Edit</summary><div class="mu" style="margin-top:6px">Name · ID · Birth year · Phone · Fee · Class · Password</div><input id="e_name_'+s._id+'" value="'+qa(s.name)+'" placeholder="Name"><input id="e_id_'+s._id+'" value="'+qa(s._id)+'" placeholder="Student ID"><input id="e_by_'+s._id+'" type="number" value="'+qa(s.byear||'')+'" placeholder="Birth year"><input id="e_ph_'+s._id+'" type="tel" value="'+qa(s.ph||'')+'" placeholder="Phone number"><input id="e_fee_'+s._id+'" type="number" value="'+qa(s.fee)+'" placeholder="Monthly fee"><select id="e_cls_'+s._id+'">'+CLASSES.map(function(c){return '<option'+(c===s.cls?' selected':'')+'>'+c+'</option>'}).join('')+'</select><input id="e_pw_'+s._id+'" value="'+qa(s.pw||s.ph||'')+'" placeholder="Password"><button onclick="editStu(\''+s._id+'\')">Save changes</button></details></div>'}).join('')}
  $('view').innerHTML=h}
 
