@@ -25,7 +25,7 @@ function monthsFrom(m) {
   for (const d of st.docs) {
     const s = d.data(), id = d.id;
     if (!(tokens[id] || []).length) continue;
-    const joined = new Date(s.ts || Date.now()).toISOString().slice(0, 7);
+    const joined = new Date((s.ts || Date.now()) + 5.5 * 3600 * 1000).toISOString().slice(0, 7);
     const items = monthsFrom(joined).map(m => ({ k: id + '_' + m, t: mName(m), a: +s.fee || 0 }));
     dues.docs.filter(x => x.data().sid === id).forEach(x => items.push({ k: 'due_' + x.id, t: x.data().title, a: +x.data().amt || 0 }));
     const pending = items.filter(i => !okSet.has(i.k) && !paySet.has(i.k));
