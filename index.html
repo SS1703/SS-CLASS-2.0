@@ -342,9 +342,9 @@ var CFG={apiKey:"AIzaSyDOpTWEgKJm6VFU5T-6ZvK18ap0eq5NQQU",authDomain:"ssclass-17
 /* ===== 2. YOUR TEACHER LOGIN EMAIL (must match firestore.rules) ===== */
 var TEACHER="17sangiri@gmail.com";
 /* ===== 3. PUSH KEY: Firebase > Project settings > Cloud Messaging > Web Push certificates > Generate key pair ===== */
-var VAPID="PASTE_VAPID_KEY";
+var VAPID="BMH87XN7YoczUTuQHCZal3yRb_NgJtbtATPampoU7oWmhEhxkmx56xaY2JVyu8968oKn0PU7Bm4CJiSHzaAeYr0";
 /* ===== 4. FILE UPLOAD (free, Cloudinary): your Cloud name and an UNSIGNED upload preset name ===== */
-var CLOUD="PASTE_CLOUD_NAME",PRESET="PASTE_UPLOAD_PRESET";
+var CLOUD="msi0libt",PRESET="ssclass";
 var DOM="@ssclass.app";
 firebase.initializeApp(CFG);
 var auth=firebase.auth(),fs=firebase.firestore();
@@ -421,7 +421,7 @@ function start(){resetLoginBtns();fade($('app'));var hl=document.querySelector('
  $('tabs').classList.toggle('many',t.length>6);
  go('home');if(!isT)trackStart()}
 function logout(){auth.signOut()}
-function go(t){if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},600);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})});render()}
+function go(t){payOpen=false;if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},600);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})});render()}
 function mine(a){return isT?a:a.filter(function(x){return x.cls===me.cls})}
 function sorted(a,k,d){return a.slice().sort(function(x,y){return d*String(x[k]||'').localeCompare(String(y[k]||''))})}
 function del(col,id){if(confirm('Delete?'))fs.collection(col).doc(id).delete()}
@@ -516,17 +516,40 @@ function receiptOf(k){
  if(!w){alert('Popup was blocked. Please allow popups in your browser.');return}
  w.document.write(html);w.document.close();
 }
-function upiPayBlock(i){
- if(!upiId())return '<p class="mu">Teacher has not set a UPI ID yet.</p>';
- var q='pa='+encodeURIComponent(upiId())+'&pn='+encodeURIComponent(upiName()||'Teacher')+'&am='+encodeURIComponent(i.a)+'&cu=INR&tn='+encodeURIComponent(i.t+' '+me._id);
- return '<p class="mu">Amount ₹'+i.a+' is filled in automatically. Tap an app below or scan the QR code.</p>'+
- '<div class="upi-grid"><a href="upi://pay?'+q+'"><button style="width:100%">Any UPI app</button></a>'+
+function upiLinks(amt,note){
+ var q='pa='+encodeURIComponent(upiId())+'&pn='+encodeURIComponent(upiName()||'Teacher')+'&am='+encodeURIComponent(amt)+'&cu=INR&tn='+encodeURIComponent(note);
+ return '<div class="upi-grid"><a href="upi://pay?'+q+'"><button style="width:100%">Any UPI app</button></a>'+
  '<a href="phonepe://pay?'+q+'"><button class="s" style="width:100%">PhonePe</button></a>'+
  '<a href="tez://upi/pay?'+q+'"><button class="s" style="width:100%">Google Pay</button></a>'+
  '<a href="upi://pay?'+q+'"><button class="s" style="width:100%">Amazon Pay / BHIM / others</button></a></div>'+
- upiQr(i.a)+
+ upiQr(amt)}
+function upiPayBlock(i){
+ if(!upiId())return '<p class="mu">Teacher has not set a UPI ID yet.</p>';
+ return '<p class="mu">Amount ₹'+i.a+' is filled in automatically. Tap an app below or scan the QR code.</p>'+
+ upiLinks(i.a,i.t+' '+me._id)+
  '<button style="width:100%;margin-top:8px" onclick="payOne(\''+i.k+'\')">I have paid ₹'+i.a+'</button>';
 }
+/* ---- quick pay: tap the Total due card on Home to pay everything at once ---- */
+var payOpen=false;
+function toPay(){return items(me).filter(function(i){return st(i.k)===0&&i.a>0})}
+function openPay(){if(!toPay().length){go('fee');return}payOpen=true;render();window.scrollTo(0,0)}
+function closePay(){payOpen=false;render();window.scrollTo(0,0)}
+function payAllView(){
+ var p=toPay().sort(function(a,b){return a.sk<b.sk?-1:1}),t=sum(p),w=sum(items(me).filter(function(i){return st(i.k)===1}));
+ var h='<button class="t-back" onclick="closePay()">‹ Home</button>';
+ if(!p.length)return h+'<div class="c" style="text-align:center;padding:24px"><b>Nothing to pay</b><p class="mu">'+(w>0?'₹'+inr(w)+' is waiting for the teacher to confirm.':'All clear.')+'</p></div>';
+ h+='<div class="c due-card"><div class="mu">Pay now</div><h2>₹'+inr(t)+'</h2><div class="mu">'+p.length+' item(s)'+(w>0?' · ₹'+inr(w)+' waiting for confirmation':'')+'</div></div>';
+ h+='<div class="c" style="margin-top:10px">'+p.map(function(i){return kv(esc(i.t)+(late(i)?' <span style="color:var(--bad)">· Overdue</span>':''),'<b>₹'+inr(i.a)+'</b>')}).join('')+'</div>';
+ h+='<div class="t-sech"><span>Pay with UPI</span></div>';
+ if(!upiId())return h+'<p class="mu">Teacher has not set a UPI ID yet.</p>';
+ h+='<div class="c"><p class="mu" style="margin-top:0">Amount ₹'+inr(t)+' is filled in automatically. Tap an app below or scan the QR code.</p>'+upiLinks(t,'SS Class fee '+me._id)+
+ '<button style="width:100%;margin-top:10px" onclick="payAll()">I have paid ₹'+inr(t)+'</button></div>';
+ h+='<p class="mu" style="text-align:center;margin-top:14px">Receipts and payment history are in the Fees tab.</p><button class="s" style="width:100%" onclick="go(\'fee\')">Open Fees</button>';
+ return h}
+async function payAll(){var p=toPay();if(!p.length)return;
+ if(!confirm('Did you pay ₹'+inr(sum(p))+' for '+p.length+' item(s)? The teacher will confirm it.'))return;
+ try{var b=fs.batch(),now=Date.now();p.forEach(function(i){b.set(fs.collection('pay').doc(i.k),{sid:me._id,name:me.name,ts:now})});await b.commit();
+  payOpen=false;render();window.scrollTo(0,0);alert('Thanks! The teacher will confirm.')}catch(e){alert('Could not save. Check your internet and try again.')}}
 async function payOne(k){try{await fs.collection('pay').doc(k).set({sid:me._id,name:me.name,ts:Date.now()});alert('Thanks! The teacher will confirm.')}catch(e){alert('Could not save')}}
 function cfg(){return S.settings.find(function(x){return x._id==='upi'})||{}}
 function upiId(){return cfg().id||'7047719059-2@ybl'}
@@ -879,7 +902,7 @@ function homeView(){
  var tot=dueOf(me),nx=sorted(mine(S.live).filter(function(x){return !ended(x)}),'when',1)[0],
   todo=allTests().filter(function(t){return t.cls===me.cls&&t.open!==false&&!S.results.some(function(r){return r.tid===t._id})}).length;
  h='<div class="hm-hero"><div><div class="mu">'+greet()+'</div><h2>'+esc(me.name)+'</h2></div><span class="t-chip">Class '+esc(me.cls)+'</span></div>';
- h+='<div class="hm-two"><div class="c due-card" onclick="go(\'fee\')"><div class="mu">Total due</div><h2>₹'+inr(tot)+'</h2><div class="mu">'+(tot>0?'Tap to pay':'All clear')+'</div></div>'+
+ h+='<div class="hm-two"><div class="c due-card" onclick="openPay()"><div class="mu">Total due</div><h2>₹'+inr(tot)+'</h2><div class="mu">'+(tot>0?'Tap to pay':'All clear')+'</div></div>'+
   '<div class="c hm-next" onclick="go(\'live\')"><div class="mu">Next class</div>'+(nx?'<b>'+esc(nx.title)+'</b><span class="mu">'+esc((nx.when||'').replace('T',' '))+'</span>':'<b>Nothing scheduled</b><span class="mu">Check back soon</span>')+'</div></div>';
  h+='<div class="t-sech"><span>Explore</span></div><div class="grid">'+
   tile('live','Live classes',nUp(mine(S.live))+' upcoming')+
@@ -922,7 +945,7 @@ function render(){
   h+=a.length?a.map(function(x){return '<div class="c row" style="margin-top:8px"><div><b>'+esc(x.title)+'</b><br><span class="mu">Class '+esc(x.cls)+'</span></div><span><a href="'+qa(safe(x.link))+'" target="_blank" rel="noopener"><button>Watch</button></a> '+delBtn('rec',x)+'</span></div>'}).join(''):'<p class="mu">No recordings yet.</p>'}
  if(tab==='mat'){h+=matView()}
  if(tab==='fee'){h+=feeView()}
- if(tab==='home'){h+=homeView()}
+ if(tab==='home'){h+=payOpen?payAllView():homeView()}
  if(tab==='stu'){h+=stuView()}
  if(tab==='tests'){h+=testsView()}
  if(tab==='status'){h+=statusView()}
