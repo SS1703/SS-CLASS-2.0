@@ -34,7 +34,7 @@ function monthsFrom(m) {
     const parts = pending.slice(0, 3).map(i => i.t).join(', ') + (pending.length > 3 ? ' +' + (pending.length - 3) + ' more' : '');
     const res = await admin.messaging().sendEachForMulticast({
       tokens: tokens[id],
-      data: { title: 'SS Class 2.0: fee due', body: `Hi ${s.name}, your total due is Rs ${total} (${parts}). Please pay.` }
+      data: { title: 'SS Class 2.0: fee due', body: `Hi ${s.name}, your total due is ₹${total} (${parts}). Please pay.` }
     });
     sent += res.successCount;
     const bad = tokens[id].filter((t, i) => !res.responses[i].success && /not-registered|invalid-registration/.test(res.responses[i].error?.code || ''));
