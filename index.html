@@ -326,7 +326,8 @@ input,select,textarea{transition:border-color .25s var(--ease),box-shadow .25s v
 /* ----- native app feel: no page-style text selection on controls, no bounce, no sticky hover ----- */
 html,body{overscroll-behavior-y:none}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-input,textarea,select,h1,h2,h3,.c p,.c b,.c .mu,.t-kv span,.t-opt,.t-qv b,.t-kv b{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+*{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,select{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 @media (hover:none){.tile:hover{transform:none}.c:hover{transform:none}}
 
 [data-t=idcard]{--i:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='5' width='20' height='14' rx='2'/%3E%3Ccircle cx='8' cy='12' r='2'/%3E%3Cpath d='M14 10h4M14 14h4'/%3E%3C/svg%3E")}
@@ -436,6 +437,11 @@ input,textarea,select,h1,h2,h3,.c p,.c b,.c .mu,.t-kv span,.t-opt,.t-qv b,.t-kv 
 @media (min-width:900px){#topbtn{bottom:24px;right:24px}}
 :root[data-fs=compact] body{font-size:13.5px}
 :root[data-fs=large] body{font-size:16.8px}
+
+html,body{overscroll-behavior:none;touch-action:manipulation}
+img{-webkit-user-drag:none}
+@media (max-width:899px){::-webkit-scrollbar{width:0;height:0}html{scrollbar-width:none}}
+.srow:active,.tile:active,button:active{transform:scale(.97);transition:transform .1s ease}
 </style></head><body class="booting"><div id="boot"><div class="skel-wrap" id="bootspin"><div class="skel" style="height:46px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="skel" style="height:96px"></div><div class="skel" style="height:96px"></div></div><div class="skel" style="height:72px"></div><div class="skel" style="height:72px"></div></div><div class="mu" id="bootmsg">Loading...</div><div id="bootact" class="hide" style="display:flex;gap:8px"><button id="bootretry">Try again</button><button class="s" id="bootout">Log out</button></div></div><div id="splash"><img alt=""><div class="sn">SS Class 2.0</div></div><button id="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Top">↑</button><div id="toast" role="status"></div><div id="dlg" style="position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;justify-content:center;background:rgba(20,23,31,.55);backdrop-filter:blur(5px)"><div class="sheet" style="width:min(100%,520px);background:var(--surface);border-radius:30px 30px 0 0;padding:14px 22px calc(22px + env(safe-area-inset-bottom));border-top:1px solid var(--line2)"><div class="grab" style="width:42px;height:4px;border-radius:4px;background:var(--line2);margin:0 auto 14px"></div><p id="dlg-msg" style="margin:0 0 12px;font-weight:600"></p><input id="dlg-inp" class="hide" style="margin-bottom:12px"><div class="t-two"><button class="s" id="dlg-no">Cancel</button><button id="dlg-yes">Confirm</button></div></div></div><div id="modal"><div class="sheet"><div class="grab"></div><pre id="mtxt"></pre><button id="mok" style="width:100%">OK</button></div></div><div id="viewer" oncontextmenu="return false" ondragstart="return false"><div class="vbar"><b id="vtitle">Viewer</b><button class="s" style="min-height:36px;padding:6px 14px" onclick="closeViewer()">Close</button></div><div class="vbody" id="vbody"><div class="vstage" id="vstage"></div><div class="vwm" id="vwm"></div></div><div id="vshield"><b style="font-size:1.15rem">Protected Content</b><p style="max-width:320px;opacity:.85;margin:8px 0 16px">Screen capture and downloads are disabled for lectures and study material.</p><button onclick="unshieldViewer()">Resume viewing</button></div></div><div class="w">
 
 <div id="home">
@@ -554,7 +560,7 @@ function start(){resetLoginBtns();fade($('app'));var hl=document.querySelector('
  $('tabs').classList.toggle('many',t.length>6);
  go('home');applyLang();updateNet();if(!isT)trackStart()}
 function logout(){auth.signOut()}
-function go(t){payOpen=false;idCardOpen=false;subPage='';if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},600);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})});render()}
+function go(t){if(t!==tab&&navigator.vibrate)try{navigator.vibrate(8)}catch(e){}payOpen=false;idCardOpen=false;subPage='';if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},600);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})});render()}
 function mine(a){return isT?a:a.filter(function(x){return x.cls===me.cls})}
 function sorted(a,k,d){return a.slice().sort(function(x,y){return d*String(x[k]||'').localeCompare(String(y[k]||''))})}
 async function del(col,id){if(await uiConfirm('Delete this item?'))fs.collection(col).doc(id).delete()}
@@ -1561,6 +1567,8 @@ function applyTheme(t){
  var r=document.documentElement;
  if(t==='light'||t==='dark'){r.setAttribute('data-theme',t)}else{r.removeAttribute('data-theme')}
  var b=$('themebtn');if(b)b.textContent=t==='dark'?'☀️':(t==='light'?'🌙':'🌓');
+ var mc=document.querySelectorAll('meta[name=theme-color]');
+ mc.forEach(function(m){if(t==='dark')m.content='#14171f';else if(t==='light')m.content='#f7f3ea';else m.content=m.media&&m.media.indexOf('dark')>-1?'#15110c':'#fbf5e8'});
 }
 function toggleTheme(){
  var cur=document.documentElement.getAttribute('data-theme');
@@ -1662,6 +1670,12 @@ function toggleSize(){
  applySize(nxt);
 }
 (function(){try{var s=localStorage.getItem('ss_fs');if(s)applySize(s)}catch(e){}})();
+
+
+document.addEventListener('copy',function(e){var t=e.target&&e.target.tagName;if(t!=='INPUT'&&t!=='TEXTAREA')e.preventDefault()});
+
+/* ---- native app feel: block context menu & subtle tab haptic ---- */
+document.addEventListener('contextmenu',function(e){var t=e.target&&e.target.tagName;if(t!=='INPUT'&&t!=='TEXTAREA')e.preventDefault()});
 
 function render(){
  var h=pushCard(tab==='home');
