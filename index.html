@@ -442,6 +442,9 @@ html,body{overscroll-behavior:none;touch-action:manipulation}
 img{-webkit-user-drag:none}
 @media (max-width:899px){::-webkit-scrollbar{width:0;height:0}html{scrollbar-width:none}}
 .srow:active,.tile:active,button:active{transform:scale(.97);transition:transform .1s ease}
+
+#notifbtn{position:relative}
+#notifbtn .nbadge{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:var(--bad);color:#fff;font:800 .65rem/17px var(--sans);text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.35)}
 </style></head><body class="booting"><div id="boot"><div class="skel-wrap" id="bootspin"><div class="skel" style="height:46px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="skel" style="height:96px"></div><div class="skel" style="height:96px"></div></div><div class="skel" style="height:72px"></div><div class="skel" style="height:72px"></div></div><div class="mu" id="bootmsg">Loading...</div><div id="bootact" class="hide" style="display:flex;gap:8px"><button id="bootretry">Try again</button><button class="s" id="bootout">Log out</button></div></div><div id="splash"><img alt=""><div class="sn">SS Class 2.0</div></div><button id="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Top">↑</button><div id="toast" role="status"></div><div id="dlg" style="position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;justify-content:center;background:rgba(20,23,31,.55);backdrop-filter:blur(5px)"><div class="sheet" style="width:min(100%,520px);background:var(--surface);border-radius:30px 30px 0 0;padding:14px 22px calc(22px + env(safe-area-inset-bottom));border-top:1px solid var(--line2)"><div class="grab" style="width:42px;height:4px;border-radius:4px;background:var(--line2);margin:0 auto 14px"></div><p id="dlg-msg" style="margin:0 0 12px;font-weight:600"></p><input id="dlg-inp" class="hide" style="margin-bottom:12px"><div class="t-two"><button class="s" id="dlg-no">Cancel</button><button id="dlg-yes">Confirm</button></div></div></div><div id="modal"><div class="sheet"><div class="grab"></div><pre id="mtxt"></pre><button id="mok" style="width:100%">OK</button></div></div><div id="viewer" oncontextmenu="return false" ondragstart="return false"><div class="vbar"><b id="vtitle">Viewer</b><button class="s" style="min-height:36px;padding:6px 14px" onclick="closeViewer()">Close</button></div><div class="vbody" id="vbody"><div class="vstage" id="vstage"></div><div class="vwm" id="vwm"></div></div><div id="vshield"><b style="font-size:1.15rem">Protected Content</b><p style="max-width:320px;opacity:.85;margin:8px 0 16px">Screen capture and downloads are disabled for lectures and study material.</p><button onclick="unshieldViewer()">Resume viewing</button></div></div><div class="w">
 
 <div id="home">
@@ -463,7 +466,7 @@ img{-webkit-user-drag:none}
 </div>
 
 <div id="app" class="hide">
- <div class="bar row"><div class="row" style="justify-content:flex-start;gap:10px;min-width:0"><img id="barlogo" alt="Home" onclick="go('home')"><h3 id="who" style="margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></h3><span id="netdot" class="netdot" title="Online"></span></div><div class="bar-acts"><button class="s icb" id="fsbtn" onclick="toggleSize()" title="Text size">Aa</button><button class="s icb" id="langbtn" onclick="toggleLang()" title="Language">বাং</button><button class="s icb" id="themebtn" onclick="toggleTheme()" title="Theme">🌓</button><button class="s" onclick="logout()">Logout</button></div></div>
+ <div class="bar row"><div class="row" style="justify-content:flex-start;gap:10px;min-width:0"><img id="barlogo" alt="Home" onclick="go('home')"><h3 id="who" style="margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></h3><span id="netdot" class="netdot" title="Online"></span></div><div class="bar-acts"><button class="s icb hide" id="notifbtn" onclick="go('notif')" title="Notifications">🔔<span class="nbadge hide" id="nbadge">0</span></button><button class="s icb" id="fsbtn" onclick="toggleSize()" title="Text size">Aa</button><button class="s icb" id="langbtn" onclick="toggleLang()" title="Language">বাং</button><button class="s icb" id="themebtn" onclick="toggleTheme()" title="Theme">🌓</button><button class="s" onclick="logout()">Logout</button></div></div>
  <div class="tabs" id="tabs"></div>
  <div id="view"></div>
 </div>
@@ -497,12 +500,12 @@ var pend=false;
 function busy(){var a=document.activeElement;return !!(a&&$('view').contains(a)&&(a.tagName==='INPUT'||a.tagName==='SELECT'))}
 function softRender(){if(qz){var a=attOf(qz.t._id);if(a&&a.submitted){qz=null;clearInterval(qtm)}else return}if(busy())pend=true;else render()}
 document.addEventListener('focusout',function(){setTimeout(function(){if(pend&&!busy()){pend=false;render()}},60)});
-function listen(k,q){unsubs.push((q||fs.collection(k)).onSnapshot(function(sn){S[k]=sn.docs.map(function(d){var o=d.data();o._id=d.id;return o});if(k==='students'||k==='secrets')mergeSec();if(me)softRender()},function(e){console.log(k,e.code)}))}
+function listen(k,q){unsubs.push((q||fs.collection(k)).onSnapshot(function(sn){S[k]=sn.docs.map(function(d){var o=d.data();o._id=d.id;return o});if(k==='students'||k==='secrets')mergeSec();if(k==='pay'&&isT)checkNewPay();if(me)softRender()},function(e){console.log(k,e.code)}))}
 function listenC(k,c){unsubs.push(fs.collection('classes').doc(c).collection(k).onSnapshot(function(sn){
  S._c[k+'|'+c]=sn.docs.map(function(d){var o=d.data();o._id=d.id;return o});
  S[k]=Object.keys(S._c).filter(function(x){return x.indexOf(k+'|')===0}).reduce(function(a,x){return a.concat(S._c[x])},[]);
  if(me)softRender()},function(e){console.log(k,c,e.code)}))}
-function stopAll(){clearInterval(hb);clearInterval(qtm);qz=null;rv=null;selStu=null;unsubs.forEach(function(u){u()});unsubs=[];S={attempts:[],secrets:[],students:[],live:[],rec:[],mat:[],pay:[],ok:[],dues:[],settings:[],usage:[],activity:[],results:[],tests:[],reminders:[],notices:[],hw:[],formulas:[],leaderboards:[],attendance:[],submissions:[],progress:[],doubts:[],_c:{}}}
+function stopAll(){clearInterval(hb);clearInterval(qtm);qz=null;rv=null;selStu=null;_seenPay=null;unsubs.forEach(function(u){u()});unsubs=[];S={attempts:[],secrets:[],students:[],live:[],rec:[],mat:[],pay:[],ok:[],dues:[],settings:[],usage:[],activity:[],results:[],tests:[],reminders:[],notices:[],hw:[],formulas:[],leaderboards:[],attendance:[],submissions:[],progress:[],doubts:[],_c:{}}}
 function msg(t){$('lm').textContent=t}
 function authMsg(e,who){var c=(e&&e.code)||'';
  if(c==='auth/network-request-failed')return 'No internet connection.';
@@ -558,7 +561,7 @@ function start(){resetLoginBtns();fade($('app'));var hl=document.querySelector('
  var t=isT?[['home','Home'],['live','Live'],['rec','Recorded'],['mat','Material'],['tests','Tests'],['fee','Fees'],['stu','Students'],['status','Status']]:[['home','Home'],['live','Live'],['rec','Recorded'],['mat','Material'],['tests','Tests'],['fee','Fees']];
  $('tabs').innerHTML=t.map(function(x){return '<button data-t="'+x[0]+'" onclick="go(\''+x[0]+'\')">'+x[1]+'</button>'}).join('');
  $('tabs').classList.toggle('many',t.length>6);
- go('home');applyLang();updateNet();if(!isT)trackStart()}
+ if($('notifbtn'))$('notifbtn').classList.toggle('hide',!isT);go('home');applyLang();updateNet();updateNotifBadge();if(!isT)trackStart()}
 function logout(){auth.signOut()}
 function go(t){if(t!==tab&&navigator.vibrate)try{navigator.vibrate(8)}catch(e){}payOpen=false;idCardOpen=false;subPage='';if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},600);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})});render()}
 function mine(a){return isT?a:a.filter(function(x){return x.cls===me.cls})}
@@ -664,12 +667,29 @@ function upiLinks(amt,note){
  '<a href="tez://upi/pay?'+q+'"><button class="s" style="width:100%">Google Pay</button></a>'+
  '<a href="upi://pay?'+q+'"><button class="s" style="width:100%">Amazon Pay / BHIM / others</button></a></div>'+
  upiQr(amt)}
+function onPaySs(k,inp){
+ var b=$('pay_btn_'+k),ok=!!(inp&&inp.files&&inp.files[0]);
+ if(b)b.disabled=!ok;
+}
+function openSs(u,nm){
+ if(!u||u==='#'){alert('Screenshot not available');return}
+ openViewerShell('Payment SS · '+(nm||'Student'));
+ $('vstage').innerHTML='<img src="'+qa(u)+'" style="max-width:100%;border-radius:14px;box-shadow:0 8px 24px -10px rgba(0,0,0,.4)">';
+}
+function isAppDiscOn(){return !!cfg().appDisc}
+function appAmt(a){return isAppDiscOn()?Math.max(0,Math.round(a*0.98)):a}
+async function toggleAppDisc(){
+ try{await fs.collection('settings').doc('upi').set({appDisc:!isAppDiscOn()},{merge:true})}
+ catch(e){alert('Could not update discount setting')}
+}
 function upiPayBlock(i){
- var r=remOf(i);
+ var r=remOf(i),p=appAmt(r),sv=r-p;
  if(!upiId())return '<p class="mu">Teacher has not set a UPI ID yet.</p>';
- return '<p class="mu">Amount ₹'+r+' is filled in automatically. Tap an app below or scan the QR code.</p>'+
- upiLinks(r,i.t+' '+me._id)+
- '<button style="width:100%;margin-top:8px" onclick="payOne(\''+i.k+'\')">I have paid ₹'+r+'</button>';
+ return '<p class="mu">Amount <b>₹'+p+'</b> is filled in automatically'+(sv>0?' <span class="t-chip ok">2% App Discount · Save ₹'+sv+'</span>':'')+'. Tap an app below or scan the QR code.</p>'+
+ upiLinks(p,i.t+' '+me._id)+
+ '<label class="t-lb" style="margin-top:14px">Upload payment screenshot (required)</label>'+
+ '<input type="file" id="pay_ss_'+i.k+'" accept="image/*" onchange="onPaySs(\''+i.k+'\',this)">'+
+ '<button id="pay_btn_'+i.k+'" disabled style="width:100%;margin-top:8px" onclick="payOne(\''+i.k+'\')">I have paid ₹'+p+'</button>';
 }
 /* ---- quick pay: tap the Total due card on Home to pay everything at once ---- */
 var payOpen=false;
@@ -684,21 +704,35 @@ function payAllView(){
  h+='<div class="c" style="margin-top:10px">'+p.map(function(i){return kv(esc(i.t)+(late(i)?' <span style="color:var(--bad)">· Overdue</span>':''),'<b>₹'+inr(remOf(i))+'</b>')}).join('')+'</div>';
  h+='<div class="t-sech"><span>Pay with UPI</span></div>';
  if(!upiId())return h+'<p class="mu">Teacher has not set a UPI ID yet.</p>';
- h+='<div class="c"><p class="mu" style="margin-top:0">Amount ₹'+inr(t)+' is filled in automatically. Tap an app below or scan the QR code.</p>'+upiLinks(t,'SS Class fee '+me._id)+
- '<button style="width:100%;margin-top:10px" onclick="payAll()">I have paid ₹'+inr(t)+'</button></div>';
+ var appT=appAmt(t),sv=t-appT;
+ h+='<div class="c"><p class="mu" style="margin-top:0">Amount <b>₹'+inr(appT)+'</b> is filled in automatically'+(sv>0?' <span class="t-chip ok">2% App Discount · Save ₹'+inr(sv)+'</span>':'')+'. Tap an app below or scan the QR code.</p>'+upiLinks(appT,'SS Class fee '+me._id)+
+ '<label class="t-lb" style="margin-top:14px">Upload payment screenshot (required)</label>'+
+ '<input type="file" id="pay_ss_ALL" accept="image/*" onchange="onPaySs(\'ALL\',this)">'+
+ '<button id="pay_btn_ALL" disabled style="width:100%;margin-top:10px" onclick="payAll()">I have paid ₹'+inr(appT)+'</button></div>';
  h+='<p class="mu" style="text-align:center;margin-top:14px">Receipts and payment history are in the Fees tab.</p><button class="s" style="width:100%" onclick="go(\'fee\')">Open Fees</button>';
  return h}
 async function payAll(){var p=toPay();if(!p.length)return;
- if(!(await uiConfirm('Did you pay ₹'+inr(sum(p))+' for '+p.length+' item(s)? The teacher will confirm it.')))return;
- try{var b=fs.batch(),now=Date.now();p.forEach(function(i){b.set(fs.collection('pay').doc(i.k),{sid:me._id,name:me.name,ts:now})});await b.commit();
-  payOpen=false;render();window.scrollTo(0,0);alert('Thanks! The teacher will confirm.')}catch(e){alert('Could not save. Check your internet and try again.')}}
-async function payOne(k){try{await fs.collection('pay').doc(k).set({sid:me._id,name:me.name,ts:Date.now()});alert('Thanks! The teacher will confirm.')}catch(e){alert('Could not save')}}
+ var f=$('pay_ss_ALL')?$('pay_ss_ALL').files[0]:null;
+ if(!f){alert('Please upload your payment screenshot first.');return}
+ if(!(await uiConfirm('Submit payment screenshot for ₹'+inr(appAmt(sum(p)))+' ('+p.length+' item(s), 2% app discount)?')))return;
+ var btn=$('pay_btn_ALL');if(btn){btn.disabled=true;btn.textContent='Uploading screenshot...'}
+ try{var ssUrl=await uploadFile(f);
+  var b=fs.batch(),now=Date.now();p.forEach(function(i){b.set(fs.collection('pay').doc(i.k),{sid:me._id,name:me.name,ss:ssUrl,appDiscount:isAppDiscOn(),ts:now})});await b.commit();
+  payOpen=false;render();window.scrollTo(0,0);alert('Thanks! Screenshot sent, teacher will confirm.')}catch(e){if(btn){btn.disabled=false;btn.textContent='I have paid ₹'+inr(appAmt(sum(p)))}alert('Upload failed: '+(e.message||'Check your internet and try again.'))}}
+async function payOne(k){
+ var f=$('pay_ss_'+k)?$('pay_ss_'+k).files[0]:null;
+ if(!f){alert('Please upload your payment screenshot first.');return}
+ var btn=$('pay_btn_'+k),orig=btn?btn.textContent:'';
+ if(btn){btn.disabled=true;btn.textContent='Uploading screenshot...'}
+ try{var ssUrl=await uploadFile(f);
+  await fs.collection('pay').doc(k).set({sid:me._id,name:me.name,ss:ssUrl,appDiscount:isAppDiscOn(),ts:Date.now()});
+  alert('Thanks! Screenshot sent, teacher will confirm.')}catch(e){if(btn){btn.disabled=false;btn.textContent=orig}alert('Upload failed: '+(e.message||'Could not save'))}}
 function cfg(){return S.settings.find(function(x){return x._id==='upi'})||{}}
 function upiId(){return cfg().id||''}
 function upiName(){return cfg().name||'Teacher'}
 async function saveUpi(){var id=$('upi').value.trim(),n=$('upin').value.trim();
  if(!/^[\w.\-]{2,}@[\w]{2,}$/.test(id)){alert('Enter a valid UPI ID like name@okhdfcbank');return}
- try{await fs.collection('settings').doc('upi').set({id:id,name:n||'Teacher'});alert('Saved')}catch(e){alert('Could not save')}}
+ try{await fs.collection('settings').doc('upi').set({id:id,name:n||'Teacher'},{merge:true});alert('Saved')}catch(e){alert('Could not save')}}
 function upiQr(amt){
  if(typeof qrcode!=='function'||!upiId())return '';
  var link='upi://pay?pa='+encodeURIComponent(upiId())+'&pn='+encodeURIComponent(upiName()||'Teacher')+(amt?'&am='+encodeURIComponent(amt):'')+'&cu=INR';
@@ -725,7 +759,8 @@ function inr(n){return Number(n||0).toLocaleString('en-IN')}
 function ym(t){var d=new Date(t);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)}
 function curM(){return ym(Date.now())}
 function mName(m){return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m.slice(5)-1]+' '+m.slice(0,4)}
-function monthsFrom(m){var r=[],y=+m.slice(0,4),mo=+m.slice(5),c=curM(),cy=+c.slice(0,4),cm=+c.slice(5);while(y<cy||(y===cy&&mo<=cm)){r.push(y+'-'+(mo<10?'0':'')+mo);mo++;if(mo>12){mo=1;y++}}return r}
+function prevM(){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return ym(d.getTime())}
+function monthsFrom(m){var r=[],y=+m.slice(0,4),mo=+m.slice(5),c=curM(),cy=+c.slice(0,4),cm=+c.slice(5);while(y<cy||(y===cy&&mo<cm)){r.push(y+'-'+(mo<10?'0':'')+mo);mo++;if(mo>12){mo=1;y++}}return r}
 function ended(x){var t=new Date(x.when).getTime();return !!t&&t+3*3600000<Date.now()}
 async function rejectPay(k){if(!(await uiConfirm('Reject this payment claim?')))return;try{await fs.collection('pay').doc(k).delete()}catch(e){alert('Could not reject')}}
 function loginText(s){return 'Hello '+s.name+', your SS Class 2.0 login.\nID: '+s._id+'\n'+(s.pw?'Password: '+s.pw:'Password: the one you set, or ask your teacher')+'\nOpen: '+location.href.split('#')[0]}
@@ -792,7 +827,7 @@ function items(s){var j=ym(s.ts||Date.now()),o=[],mf=Math.max(0,(+s.fee||0)-(+s.
 function remOf(i){return Math.max(0,i.a-paidOf(i.k,i.a))}
 function st(k,full){var o=okRec(k);if(o&&(o.amt==null||(full!=null&&+o.amt>=full)))return 2;if(S.pay.some(function(x){return x._id===k}))return 1;return 0}
 function sum(a){return a.reduce(function(t,i){return t+remOf(i)},0)}
-function late(i){return i.mo&&i.m<curM()}
+function late(i){return i.mo&&i.m<prevM()}
 function badge(i){var s=st(i.k,i.a),p=paidOf(i.k,i.a);if(s===2)return '✅ Paid';if(s===1)return '🕒 Waiting for confirmation';var base=late(i)?'🔴 Overdue':'⏳ Due';return p>0?base+' · ₹'+inr(p)+' paid (₹'+inr(remOf(i))+' left)':base}
 function feeView(){var h='';
  if(!isT){
@@ -871,7 +906,8 @@ function payPane(s){
  if(tot>0)h+='<div class="t-sech"><span>Send reminder</span></div><div class="t-two"><button class="t-wa" onclick="sendTo(\''+id+'\',\'due\')">WhatsApp</button><button class="s" onclick="sendTo(\''+id+'\',\'due\',\'sms\')">SMS</button></div>';
  h+='<div class="t-sech"><span>Dues</span></div>';
  h+=pd.length?pd.map(function(i){var q=st(i.k,i.a);
-  var acts=q===1?'<button onclick="okPay(\''+i.k+'\')">Confirm</button> <button class="s" onclick="rejectPay(\''+i.k+'\')">Reject</button>':'<button onclick="okPay(\''+i.k+'\')">Receive ₹'+inr(remOf(i))+'</button> <button class="s" onclick="partialPay(\''+i.k+'\','+i.a+')">Partial</button>';
+  var pc=q===1?S.pay.find(function(x){return x._id===i.k}):null;
+  var acts=q===1?((pc&&pc.ss?'<button class="s" onclick="openSs(\''+qa(safe(pc.ss))+'\',\''+qa(s.name)+'\')">View SS</button> ':'')+'<button onclick="okPay(\''+i.k+'\')">Confirm</button> <button class="s" onclick="rejectPay(\''+i.k+'\')">Reject</button>'):'<button onclick="okPay(\''+i.k+'\')">Receive ₹'+inr(remOf(i))+'</button> <button class="s" onclick="partialPay(\''+i.k+'\','+i.a+')">Partial</button>';
   var ed=i.id?'<details style="margin-top:10px"><summary class="mu">Edit this due</summary><input id="ed_t_'+i.id+'" value="'+qa(i.t)+'" placeholder="Reason"><input id="ed_a_'+i.id+'" type="number" value="'+qa(i.a)+'" placeholder="Amount"><div class="t-two"><button onclick="saveDue(\''+i.id+'\')">Save</button><button class="s t-danger" onclick="del(\'dues\',\''+i.id+'\')">Delete</button></div></details>':'';
   return '<div class="c" style="margin-top:8px"><div class="row"><div><b>'+esc(i.t)+'</b><br><span class="mu">'+badge(i)+'</span></div><b>₹'+inr(i.a)+'</b></div><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">'+acts+'</div>'+ed+'</div>'}).join(''):'<p class="mu">Nothing is due.</p>';
  h+='<details class="c" style="margin-top:12px"><summary><b>＋ Add due</b></summary><input id="d_title_'+id+'" placeholder="Reason (e.g. Exam fee)"><input id="d_amt_'+id+'" type="number" placeholder="Amount (Rs)"><button style="width:100%" onclick="addDueFor(\''+id+'\')">Add due</button></details>';
@@ -895,6 +931,7 @@ function feeTeacher(){
  if(remOpen)return remindView();
  var mk=curM(),pendT=0,colT=0;S.students.forEach(function(s){items(s).forEach(function(i){var r=remOf(i),p=paidOf(i.k,i.a);pendT+=r;var o=okRec(i.k);if(o&&ym(o.ts)===mk)colT+=p;})});
  var h='<div class="stats"><div class="c stat"><div class="mu">Pending</div><b class="sv">₹'+inr(pendT)+'</b></div><div class="c stat"><div class="mu">Collected this month</div><b class="sv">₹'+inr(colT)+'</b></div></div>';
+ h+='<div class="c row" style="margin-top:10px"><div><b>2% App Discount</b><br><span class="mu">'+(isAppDiscOn()?'ON · App payers get 2% off':'OFF · Everyone pays full amount')+'</span></div><button class="'+(isAppDiscOn()?'':'s')+'" onclick="toggleAppDisc()">'+(isAppDiscOn()?'Turn OFF':'Turn ON')+'</button></div>';
  h+=remCard();
  h+='<div class="t-sech"><span>Who owes</span><span class="mu">Tap a student</span></div>';
  var a=S.students.map(function(s){return {s:s,d:dueOf(s)}}).sort(function(x,y){return y.d-x.d});
@@ -1677,6 +1714,54 @@ document.addEventListener('copy',function(e){var t=e.target&&e.target.tagName;if
 /* ---- native app feel: block context menu & subtle tab haptic ---- */
 document.addEventListener('contextmenu',function(e){var t=e.target&&e.target.tagName;if(t!=='INPUT'&&t!=='TEXTAREA')e.preventDefault()});
 
+
+/* ---- teacher payment notifications ---- */
+var _seenPay=null;
+function payClaims(){
+ if(!isT)return [];
+ var mk=curM();
+ return S.pay.filter(function(p){return !p.ts||ym(p.ts)===mk}).map(function(p){
+  var sid=p.sid||sidOf(p._id),s=S.students.find(function(x){return x._id===sid});
+  var it=s?items(s).find(function(i){return i.k===p._id}):null;
+  var amt=it?remOf(it):0;
+  if(it&&hasOk(p._id,it.a))return null;
+  return {p:p,s:s,it:it,amt:amt,title:it?it.t:p._id,name:s?s.name:(p.name||sid),cls:s?s.cls:'-'};
+ }).filter(Boolean).sort(function(a,b){return (b.p.ts||0)-(a.p.ts||0)});
+}
+function updateNotifBadge(){
+ var b=$('nbadge');if(!b||!isT)return;
+ var n=payClaims().length;
+ b.textContent=n>99?'99+':String(n);
+ b.classList.toggle('hide',n===0);
+}
+function checkNewPay(){
+ var ids=S.pay.map(function(x){return x._id});
+ if(_seenPay===null){_seenPay=ids;return}
+ var added=S.pay.filter(function(x){return _seenPay.indexOf(x._id)<0});
+ _seenPay=ids;
+ if(added.length){
+  var last=added[0],nm=last.name||last.sid||'A student';
+  toast('🔔 '+nm+' tapped "I have paid"!');
+  if(navigator.vibrate)try{navigator.vibrate([40,40,40])}catch(e){}
+  if('Notification' in window&&Notification.permission==='granted'){
+   try{new Notification('SS Class 2.0 · Payment Claim',{body:nm+' tapped "I have paid". Open Notifications to confirm.'})}catch(e){}
+  }
+ }
+}
+function notifView(){
+ var h='<button class="t-back" onclick="go(\'home\')">‹ Home</button>';
+ var list=payClaims();
+ h+='<div class="t-sech"><span>Notifications · '+esc(mName(curM()))+' ('+list.length+')</span><span class="mu">Resets monthly</span></div>';
+ if('Notification' in window&&Notification.permission==='default'){
+  h+='<div class="c row" style="margin-bottom:8px"><span class="mu">Get browser alerts when a student pays</span><button class="s" onclick="Notification.requestPermission().then(function(){render()})">Enable</button></div>';
+ }
+ if(!list.length)return h+emptyBox('🔔','No pending payment claims','When a student taps "I have paid", it will appear here.');
+ return h+list.map(function(c){
+  return '<div class="c" style="margin-top:8px"><div class="row"><div><b>'+esc(c.name)+'</b> <span class="mu">· Class '+esc(c.cls)+'</span><br><span class="mu">'+esc(c.title)+' · '+esc(ago(c.p.ts))+'</span></div><div style="text-align:right"><b style="color:var(--ac);font-size:1.1rem">₹'+inr(c.p.appDiscount?appAmt(c.amt):c.amt)+'</b>'+(c.p.appDiscount?'<br><span class="mu">2% app off</span>':'')+'</div></div>'+
+   '<div class="card-acts">'+(c.p.ss?'<button class="s" onclick="openSs(\''+qa(safe(c.p.ss))+'\',\''+qa(c.name)+'\')">View SS</button>':'')+'<button onclick="okPay(\''+c.p._id+'\')">Confirm ₹'+inr(c.p.appDiscount?appAmt(c.amt):c.amt)+'</button><button class="s" onclick="rejectPay(\''+c.p._id+'\')">Reject</button>'+(c.s?'<button class="s" onclick="openStu(\''+c.s._id+'\',\'pay\')">Profile</button>':'')+'</div></div>';
+ }).join('');
+}
+
 function render(){
  var h=pushCard(tab==='home');
  if(tab==='live'){
@@ -1697,10 +1782,11 @@ function render(){
  if(tab==='doubts'){h+=doubtsView()}
  if(tab==='notice'){h+=noticeView()}
  if(tab==='formula'){h+=formulaView()}
+ if(tab==='notif'){h+=notifView()}
  if(tab==='stu'){h+=stuView()}
  if(tab==='tests'){h+=testsView()}
  if(tab==='status'){h+=statusView()}
- $('view').innerHTML=h;applyLang()}
+ $('view').innerHTML=h;applyLang();updateNotifBadge()}
 
 /* ---- friendly alerts: short messages become a toast, long ones a bottom sheet ---- */
 var _aq=[],_tt;
