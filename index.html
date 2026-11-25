@@ -445,6 +445,25 @@ img{-webkit-user-drag:none}
 
 #notifbtn{position:relative}
 #notifbtn .nbadge{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:var(--bad);color:#fff;font:800 .65rem/17px var(--sans);text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+
+html{scroll-behavior:auto!important}
+.bar,#tabs{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.bar{background:var(--bg)!important;box-shadow:0 1px 0 var(--line)}
+#tabs{background:var(--surface)!important;box-shadow:0 10px 28px -12px rgba(0,0,0,.35)}
+.c{transition:transform .12s ease!important;box-shadow:0 2px 10px -6px rgba(0,0,0,.18)!important}
+.tile{transition:transform .12s ease!important;box-shadow:0 4px 12px -8px rgba(0,0,0,.22)!important}
+#view.anim>*{animation:none!important}
+#view.anim .grid>.tile{animation:none!important}
+@keyframes fastIn{from{opacity:.3;transform:translate3d(0,6px,0)}to{opacity:1;transform:none}}
+#view.anim{animation:fastIn .16s cubic-bezier(.2,.8,.2,1) both}
+
+#tabs,.bar,#topbtn{transform:translateZ(0);will-change:transform}
+#view{will-change:transform,opacity;transform:translateZ(0)}
+#view .c,#view .srow{contain:layout style;content-visibility:auto;contain-intrinsic-size:auto 88px}
+.tile{contain:layout style;transform:translateZ(0)}
+.c,.tile,button,.srow{transition:transform .09s cubic-bezier(.16,1,.3,1)!important}
+@keyframes fastIn{from{opacity:.5;transform:translate3d(0,8px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+#view.anim{animation:fastIn .12s cubic-bezier(.16,1,.3,1) both}
 </style></head><body class="booting"><div id="boot"><div class="skel-wrap" id="bootspin"><div class="skel" style="height:46px"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="skel" style="height:96px"></div><div class="skel" style="height:96px"></div></div><div class="skel" style="height:72px"></div><div class="skel" style="height:72px"></div></div><div class="mu" id="bootmsg">Loading...</div><div id="bootact" class="hide" style="display:flex;gap:8px"><button id="bootretry">Try again</button><button class="s" id="bootout">Log out</button></div></div><div id="splash"><img alt=""><div class="sn">SS Class 2.0</div></div><button id="topbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Top">↑</button><div id="toast" role="status"></div><div id="dlg" style="position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;justify-content:center;background:rgba(20,23,31,.55);backdrop-filter:blur(5px)"><div class="sheet" style="width:min(100%,520px);background:var(--surface);border-radius:30px 30px 0 0;padding:14px 22px calc(22px + env(safe-area-inset-bottom));border-top:1px solid var(--line2)"><div class="grab" style="width:42px;height:4px;border-radius:4px;background:var(--line2);margin:0 auto 14px"></div><p id="dlg-msg" style="margin:0 0 12px;font-weight:600"></p><input id="dlg-inp" class="hide" style="margin-bottom:12px"><div class="t-two"><button class="s" id="dlg-no">Cancel</button><button id="dlg-yes">Confirm</button></div></div></div><div id="modal"><div class="sheet"><div class="grab"></div><pre id="mtxt"></pre><button id="mok" style="width:100%">OK</button></div></div><div id="viewer" oncontextmenu="return false" ondragstart="return false"><div class="vbar"><b id="vtitle">Viewer</b><button class="s" style="min-height:36px;padding:6px 14px" onclick="closeViewer()">Close</button></div><div class="vbody" id="vbody"><div class="vstage" id="vstage"></div><div class="vwm" id="vwm"></div></div><div id="vshield"><b style="font-size:1.15rem">Protected Content</b><p style="max-width:320px;opacity:.85;margin:8px 0 16px">Screen capture and downloads are disabled for lectures and study material.</p><button onclick="unshieldViewer()">Resume viewing</button></div></div><div class="w">
 
 <div id="home">
@@ -498,7 +517,8 @@ function safe(u){return /^https?:\/\//i.test(u)?u:'#'}
 function mode(m){$('fS').classList.toggle('hide',m!=='s');$('fT').classList.toggle('hide',m!=='t');$('tS').classList.toggle('on',m==='s');$('tT').classList.toggle('on',m==='t')}
 var pend=false;
 function busy(){var a=document.activeElement;return !!(a&&$('view').contains(a)&&(a.tagName==='INPUT'||a.tagName==='SELECT'))}
-function softRender(){if(qz){var a=attOf(qz.t._id);if(a&&a.submitted){qz=null;clearInterval(qtm)}else return}if(busy())pend=true;else render()}
+var _srRaf=0;
+function softRender(){if(qz){var a=attOf(qz.t._id);if(a&&a.submitted){qz=null;clearInterval(qtm)}else return}if(busy()){pend=true;return}if(_srRaf)cancelAnimationFrame(_srRaf);_srRaf=requestAnimationFrame(function(){_srRaf=0;if(!busy())render()})}
 document.addEventListener('focusout',function(){setTimeout(function(){if(pend&&!busy()){pend=false;render()}},60)});
 function listen(k,q){unsubs.push((q||fs.collection(k)).onSnapshot(function(sn){S[k]=sn.docs.map(function(d){var o=d.data();o._id=d.id;return o});if(k==='students'||k==='secrets')mergeSec();if(k==='pay'&&isT)checkNewPay();if(me)softRender()},function(e){console.log(k,e.code)}))}
 function listenC(k,c){unsubs.push(fs.collection('classes').doc(c).collection(k).onSnapshot(function(sn){
@@ -540,7 +560,7 @@ function loginBtns(){return [$('fS').querySelector('button'),$('fT').querySelect
 function resetLoginBtns(){loginBtns().forEach(function(b){setBusy(b,false)})}
 auth.onAuthStateChanged(function(u){
  if(!u){stopAll();me=null;isT=false;['sid','spw','temail','tpw'].forEach(function(i){$(i).value=''});resetLoginBtns();
-  $('app').classList.add('hide');$('home').classList.remove('hide');fade($('home'));bootDone();return}
+  $('app').classList.add('hide');$('home').classList.remove('hide');fade($('home'));applyLang();bootDone();return}
  var em=(u.email||'').toLowerCase();
  if(em===TEACHER.toLowerCase()){stopAll();isT=true;me={name:'Teacher'};['students','secrets','attempts','pay','ok','dues','settings','usage','activity','results','reminders','attendance','submissions','progress','doubts'].forEach(function(k){listen(k)});['live','rec','mat','tests','notices','hw','formulas','leaderboards'].forEach(function(k){CLASSES.forEach(function(c){listenC(k,c)})});watchGrading();verifyBanner(u);start();bootDone();return}
  if(!em.endsWith(DOM)){auth.signOut();msg('Account not found.');return}
@@ -563,7 +583,7 @@ function start(){resetLoginBtns();fade($('app'));var hl=document.querySelector('
  $('tabs').classList.toggle('many',t.length>6);
  if($('notifbtn'))$('notifbtn').classList.toggle('hide',!isT);go('home');applyLang();updateNet();updateNotifBadge();if(!isT)trackStart()}
 function logout(){auth.signOut()}
-function go(t){if(t!==tab&&navigator.vibrate)try{navigator.vibrate(8)}catch(e){}payOpen=false;idCardOpen=false;subPage='';if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},600);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})});render()}
+function go(t){if(t!==tab&&navigator.vibrate)try{navigator.vibrate(8)}catch(e){}payOpen=false;idCardOpen=false;subPage='';if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},125);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest'})});render()}
 function mine(a){return isT?a:a.filter(function(x){return x.cls===me.cls})}
 function sorted(a,k,d){return a.slice().sort(function(x,y){return d*String(x[k]||'').localeCompare(String(y[k]||''))})}
 async function del(col,id){if(await uiConfirm('Delete this item?'))fs.collection(col).doc(id).delete()}
@@ -1619,25 +1639,148 @@ function toggleTheme(){
 /* ---- language toggle (EN / BN) ---- */
 var BN={
  'Home':'হোম','Live':'লাইভ','Recorded':'রেকর্ড','Material':'নোটস','Tests':'পরীক্ষা','Fees':'ফি','Students':'ছাত্র','Status':'রিপোর্ট',
- 'Live classes':'লাইভ ক্লাস','Recordings':'রেকর্ডিং','Study material':'স্টাডি ম্যাটেরিয়াল','Your ID Card':'তোমার আইডি কার্ড',
- 'Homework':'হোমওয়ার্ক','Doubts':'ডাউট / প্রশ্ন','Notices':'নোটিশ','Formulas':'ফর্মুলা কার্ড','Remind all':'সবাইকে রিমাইন্ড',
- 'Report':'রিপোর্ট','Logout':'লগআউট','Total due':'মোট বকেয়া','Next class':'পরবর্তী ক্লাস','Explore':'অপশনসমূহ','Manage':'ম্যানেজ',
- 'Welcome back':'স্বাগতম','Good morning':'শুভ সকাল','Good afternoon':'শুভ দুপুর','Good evening':'শুভ সন্ধ্যা',
- 'Change password':'পাসওয়ার্ড পরিবর্তন','All clear':'সব ক্লিয়ার','Tap to pay':'পে করতে ট্যাপ করো','Nothing scheduled':'কোনো ক্লাস নেই'
+ 'Live classes':'লাইভ ক্লাস','Live Classes':'লাইভ ক্লাস','Recordings':'রেকর্ডিং','Study material':'স্টাডি ম্যাটেরিয়াল','Study Material':'স্টাডি ম্যাটেরিয়াল',
+ 'Your ID Card':'তোমার আইডি কার্ড','Homework':'হোমওয়ার্ক','Doubts':'ডাউট / প্রশ্ন','Notices':'নোটিশ','Formulas':'ফর্মুলা কার্ড',
+ 'Remind all':'সবাইকে রিমাইন্ড','Report':'রিপোর্ট','Logout':'লগআউট','Login':'লগইন','Total due':'মোট বকেয়া','Next class':'পরবর্তী ক্লাস',
+ 'Explore':'অপশনসমূহ','Manage':'ম্যানেজ','Welcome back':'স্বাগতম','Sign in to continue learning.':'পড়াশোনা শুরু করতে লগইন করো।',
+ 'Good morning':'শুভ সকাল','Good afternoon':'শুভ দুপুর','Good evening':'শুভ সন্ধ্যা','Teacher Panel':'টিচার প্যানেল','Teacher':'শিক্ষক','Student':'ছাত্র',
+ 'Change password':'পাসওয়ার্ড পরিবর্তন','Save new password':'নতুন পাসওয়ার্ড সেভ করো','All clear':'সব ক্লিয়ার','Clear':'ক্লিয়ার',
+ 'Tap to pay':'পে করতে ট্যাপ করো','Nothing scheduled':'কোনো ক্লাস নেই','Check back soon':'শীঘ্রই আপডেট হবে','Check back soon!':'শীঘ্রই আপডেট হবে!',
+ 'Pending':'বকেয়া','Collected':'আদায়','Collected this month':'এই মাসে আদায়','Active':'সক্রিয়','Idle':'নিষ্ক্রিয়','Installed':'ইনস্টল',
+ 'Total time':'মোট সময়','Pay now':'এখনই পে করো','Open Fees':'ফি পেজ খোলো','Receipts and payment history are in the Fees tab.':'রসিদ ও পেমেন্টের হিসাব ফি ট্যাবে পাবে।',
+ 'Pay with UPI':'UPI দিয়ে পে করো','Any UPI app':'যেকোনো UPI অ্যাপ','Add Student':'ছাত্র যোগ করো','Pick from phone contacts':'ফোন কন্টাক্ট থেকে নাও','Add':'যোগ করো',
+ 'Schedule Live Class':'লাইভ ক্লাস শিডিউল করো','Add Recording':'রেকর্ডিং যোগ করো','Add Material':'নোটস / পিডিএফ যোগ করো',
+ 'Handwritten notes':'হাতের লেখা নোটস','Typed notes':'টাইপ করা নোটস','Question papers & tests':'প্রশ্নপত্র ও টেস্ট',
+ 'All':'সব','Free':'ফ্রি','Premium':'প্রিমিয়াম','★ Saved':'★ সেভ করা','Watch':'দেখো','Open':'খোলো','Join':'জয়েন করো',
+ 'Make Free':'ফ্রি করো','Make Premium':'প্রিমিয়াম করো','Clear all dues to unlock':'আনলক করতে সব বকেয়া মেটাও',
+ 'Your progress':'তোমার অগ্রগতি','Study Progress & Badges':'পড়াশোনার অগ্রগতি ও ব্যাজ',
+ 'Attend classes, submit homework & score 80%+ to unlock badges!':'ক্লাস করো, হোমওয়ার্ক জমা দাও ও ৮০%+ নম্বর পেয়ে ব্যাজ জেতো!',
+ 'Your Performance':'তোমার পারফরম্যান্স','No tests yet':'এখনো কোনো পরীক্ষা নেই','Your teacher will add mock tests and quizzes here.':'তোমার শিক্ষক এখানে মক টেস্ট ও কুইজ যোগ করবেন।',
+ 'Start test':'পরীক্ষা শুরু করো','Resume test':'পরীক্ষা চালিয়ে যাও','Review answers':'উত্তর দেখো','Submit test':'পরীক্ষা জমা দাও',
+ 'This test is closed.':'এই পরীক্ষাটি বন্ধ আছে।','Submitted. Checking your score...':'জমা হয়েছে। নম্বর দেখা হচ্ছে...',
+ '🏆 Class Top 3':'🏆 ক্লাসের সেরা ৩','＋ Create a test':'＋ নতুন পরীক্ষা বানাও','Publish test':'পরীক্ষা পাবলিশ করো','Add this question':'প্রশ্ন যোগ করো',
+ 'Close test':'পরীক্ষা বন্ধ করো','Reopen test':'পরীক্ষা আবার খোলো','Delete':'মুছে ফেলো','Results':'ফলাফল','Retake':'আবার দাও',
+ 'Who owes':'কার কত বাকি','Tap a student':'ছাত্রের নামের উপর ট্যাপ করো','Payment settings':'পেমেন্ট সেটিংস','Save':'সেভ করো',
+ '2% App Discount':'২% অ্যাপ ডিসকাউন্ট','ON · App payers get 2% off':'চালু · অ্যাপ থেকে পে করলে ২% ছাড়','OFF · Everyone pays full amount':'বন্ধ · সবাইকে পুরো টাকা দিতে হবে',
+ 'Turn OFF':'বন্ধ করো','Turn ON':'চালু করো','Monthly reminders':'মাসিক রিমাইন্ডার','Send to next student on WhatsApp':'হোয়াটসঅ্যাপে পরের ছাত্রকে পাঠাও',
+ 'Download PDF':'পিডিএফ ডাউনলোড','Export CSV (Excel)':'CSV (এক্সেল) ডাউনলোড','Export Fee Report (CSV / Excel)':'ফি রিপোর্ট ডাউনলোড (CSV / এক্সেল)',
+ 'Most active first':'সবচেয়ে সক্রিয় আগে','Profile':'প্রোফাইল','Payment status':'পেমেন্ট স্ট্যাটাস','Send login details':'লগইন ডিটেইলস পাঠাও',
+ 'App activity':'অ্যাপ অ্যাক্টিভিটি','Edit profile':'প্রোফাইল এডিট করো','Save changes':'পরিবর্তন সেভ করো','Delete this student':'এই ছাত্রকে মুছে ফেলো',
+ 'Dues':'বকেয়া তালিকা','Nothing is due.':'কোনো বকেয়া নেই।','＋ Add due':'＋ বকেয়া যোগ করো','Add due':'বকেয়া যোগ করো',
+ 'Change monthly fee':'মাসিক ফি পরিবর্তন করো','Save fee':'ফি সেভ করো','Send reminder':'রিমাইন্ডার পাঠাও',
+ 'Confirm':'কনফার্ম','Reject':'বাতিল','Partial':'আংশিক','View SS':'স্ক্রিনশট দেখো','Receipt':'রসিদ','Undo':'আগের অবস্থায় ফেরত',
+ 'Post Notice':'নোটিশ পোস্ট করো','Post':'পোস্ট করো','＋ Assign Homework':'＋ হোমওয়ার্ক দাও','Assign':'দাও','Submit homework':'হোমওয়ার্ক জমা দাও',
+ 'View sheet':'শিট দেখো','Open work':'কাজ দেখো','Save feedback':'মন্তব্য সেভ করো','Submitted':'জমা হয়েছে',
+ 'Ask a Doubt':'ডাউট / প্রশ্ন করো','Post Doubt':'প্রশ্ন পোস্ট করো','Save reply':'উত্তর সেভ করো','Waiting for teacher reply...':'শিক্ষকের উত্তরের অপেক্ষায়...',
+ 'Add Profile Photo':'প্রোফাইল ফটো যোগ করো','Change Photo':'ফটো পরিবর্তন করো','Remove Photo':'ফটো সরাও',
+ 'Download ID Card (PNG)':'আইডি কার্ড ডাউনলোড (PNG)','Download PNG':'PNG ডাউনলোড',
+ '＋ Add Formula / Revision Card':'＋ ফর্মুলা / রিভিশন কার্ড যোগ করো','Add Card':'কার্ড যোগ করো',
+ 'No live classes scheduled':'কোনো লাইভ ক্লাস নেই','No recordings found':'কোনো রেকর্ডিং পাওয়া যায়নি','Nothing here yet':'এখানে এখনো কিছু নেই',
+ 'No notices yet':'কোনো নোটিশ নেই','No homework yet':'কোনো হোমওয়ার্ক নেই','No doubts found':'কোনো ডাউট পাওয়া যায়নি','No formula cards yet':'কোনো ফর্মুলা কার্ড নেই',
+ 'No pending payment claims':'কোনো পেন্ডিং পেমেন্ট নেই','When a student taps "I have paid", it will appear here.':'কোনো ছাত্র "I have paid" চাপলে এখানে দেখাবে।',
+ 'All Classes':'সব ক্লাস','Install app':'অ্যাপ ইনস্টল করো','Close':'বন্ধ করো','Cancel':'বাতিল','OK':'ঠিক আছে',
+ 'Protected Content':'সুরক্ষিত কন্টেন্ট','Resume viewing':'আবার দেখো','View & download':'দেখো ও ডাউনলোড করো',
+ 'Nobody owes':'কারো বাকি নেই','All done':'সব শেষ','Yes':'হ্যাঁ','No':'না','Never':'কখনো না','Just now':'এইমাত্র','Ended':'শেষ'
 };
+var BN_PH={
+ 'Student ID':'স্টুডেন্ট আইডি','Password':'পাসওয়ার্ড','Teacher email':'টিচার ইমেইল','Search by name or ID':'নাম বা আইডি দিয়ে খুঁজুন',
+ 'Search recordings...':'রেকর্ডিং খুঁজুন...','Search doubts by topic or question...':'টপিক বা প্রশ্ন দিয়ে খুঁজুন...',
+ 'Notice title':'নোটিশের শিরোনাম','Message / details':'বিস্তারিত বার্তা','Subject':'বিষয়','Title':'শিরোনাম',
+ 'Topic / Lecture name (optional)':'টপিক / লেকচারের নাম (ঐচ্ছিক)','Write your question here...':'তোমার প্রশ্ন এখানে লেখো...',
+ 'Write reply...':'উত্তর লেখো...','Marks (e.g. 9/10)':'নম্বর (যেমন 9/10)','Remark':'মন্তব্য',
+ 'New password (at least 6 characters)':'নতুন পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)','Type it again':'আবার লেখো'
+};
+var BN_RX=[
+ [/^(\d+) enrolled$/,'$1 জন ভর্তি'],
+ [/^(₹[\d,]+) pending$/,'$1 বাকি'],
+ [/^(\d+) installed the app$/,'$1 জন ইনস্টল করেছে'],
+ [/^(\d+) created$/,'$1 টি তৈরি'],
+ [/^(\d+) upcoming$/,'$1 টি আসন্ন'],
+ [/^(\d+) videos$/,'$1 টি ভিডিও'],
+ [/^(\d+) files?$/,'$1 টি ফাইল'],
+ [/^(\d+) assigned$/,'$1 টি দেওয়া হয়েছে'],
+ [/^(\d+) unanswered$/,'$1 টি উত্তর বাকি'],
+ [/^(\d+) posted$/,'$1 টি পোস্ট'],
+ [/^(\d+) cards$/,'$1 টি কার্ড'],
+ [/^(\d+) to take$/,'$1 টি বাকি'],
+ [/^(\d+) to remind$/,'$1 জনকে রিমাইন্ড'],
+ [/^(\d+) in class$/,'ক্লাসে $1 টি'],
+ [/^(\d+) pending$/,'$1 টি বাকি'],
+ [/^(\d+) classes attended$/,'$1 টি ক্লাস উপস্থিত'],
+ [/^(\d+) completed · (\d+) attended$/,'$1 টি সম্পূর্ণ · $2 টি ক্লাস উপস্থিত'],
+ [/^(\d+) of (\d+) (watched|completed)$/,'$2 টির মধ্যে $1 টি সম্পূর্ণ'],
+ [/^All students \((\d+)\)$/,'সকল ছাত্র ($1)'],
+ [/^Your tests \((\d+)\)$/,'তোমার পরীক্ষা ($1)'],
+ [/^Homework \((\d+)\)$/,'হোমওয়ার্ক ($1)'],
+ [/^Doubts \((\d+)\)$/,'ডাউট / প্রশ্ন ($1)'],
+ [/^Notices \((\d+)\)$/,'নোটিশ ($1)'],
+ [/^Notifications · (.+) \((\d+)\)$/,'নোটিফিকেশন · $1 ($2)'],
+ [/^Formula & Revision Cards \((\d+)\)$/,'ফর্মুলা ও রিভিশন কার্ড ($1)'],
+ [/^Submissions \((\d+)\)$/,'জমা দিয়েছে ($1)'],
+ [/^Attended \((\d+)\)$/,'উপস্থিত ($1)'],
+ [/^Paid history \((\d+)\)$/,'পরিশোধিত ($1)'],
+ [/^Questions \((\d+)\)$/,'প্রশ্ন ($1)'],
+ [/^Question (\d+) of (\d+)$/,'প্রশ্ন $1 / $2'],
+ [/^(\d+)\/(\d+) answered$/,'$1/$2 উত্তর দেওয়া হয়েছে'],
+ [/^Class ([A-Z0-9]+)$/,'ক্লাস $1'],
+ [/^(₹[\d,]+) due$/,'$1 বাকি'],
+ [/^Hi, (.+) \(Class (.+)\)$/,'হ্যালো, $1 (ক্লাস $2)'],
+ [/^(\d+) pending item\(s\)$/,'$1 টি বকেয়া আছে'],
+ [/^I have paid (₹[\d,]+)$/,'আমি $1 দিয়েছি'],
+ [/^Confirm (₹[\d,]+)$/,'কনফার্ম $1'],
+ [/^Receive (₹[\d,]+)$/,'জমা নিন $1'],
+ [/^Clear (₹[\d,]+) due$/,'$1 বাকি মেটাও']
+];
+function trBn(s){
+ if(BN[s])return BN[s];
+ for(var i=0;i<BN_RX.length;i++){if(BN_RX[i][0].test(s))return s.replace(BN_RX[i][0],BN_RX[i][1])}
+ return s;
+}
+var _enTxt=new WeakMap(),_enPh=new WeakMap(),_hasBn=false;
 var _lang=(function(){try{return localStorage.getItem('ss_lang')||'en'}catch(e){return 'en'}})();
 function toggleLang(){
  _lang=_lang==='bn'?'en':'bn';
  try{localStorage.setItem('ss_lang',_lang)}catch(e){}
  var lb=$('langbtn');if(lb)lb.textContent=_lang==='bn'?'EN':'বাং';
- if(me)start();
+ if(me)start();else applyLang();
 }
 function applyLang(){
  var lb=$('langbtn');if(lb)lb.textContent=_lang==='bn'?'EN':'বাং';
- if(_lang!=='bn')return;
+ if(_lang!=='bn'&&!_hasBn)return;
+ if(_lang==='bn')_hasBn=true;
+ var roots=[$('app'),$('home'),$('viewer'),$('modal'),$('dlg')].filter(Boolean);
+ roots.forEach(function(root){
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null,false),n;
+  while((n=w.nextNode())){
+   var p=n.parentElement;if(!p)continue;
+   var tag=p.tagName;
+   if(tag==='SCRIPT'||tag==='STYLE'||p.id==='langbtn'||p.id==='themebtn'||p.id==='fsbtn'||p.id==='notifbtn'||p.id==='nbadge')continue;
+   var raw=n.nodeValue;if(!raw||!raw.trim())continue;
+   if(!_enTxt.has(n))_enTxt.set(n,raw);
+   var orig=_enTxt.get(n);
+   if(_lang==='bn'){
+    var lead=orig.match(/^\s*/)[0],trail=orig.match(/\s*$/)[0],core=orig.trim();
+    var t=trBn(core);
+    if(t!==core)n.nodeValue=lead+t+trail;
+   }else{
+    if(n.nodeValue!==orig)n.nodeValue=orig;
+   }
+  }
+  root.querySelectorAll('input[placeholder],textarea[placeholder]').forEach(function(inp){
+   if(!_enPh.has(inp))_enPh.set(inp,inp.getAttribute('placeholder')||'');
+   var orig=_enPh.get(inp);
+   inp.setAttribute('placeholder',_lang==='bn'?(BN_PH[orig]||orig):orig);
+  });
+ });
+}
+var BN_REV={};Object.keys(BN).forEach(function(k){BN_REV[BN[k]]=k});
+function applyLang(){
+ var lb=$('langbtn');if(lb)lb.textContent=_lang==='bn'?'EN':'বাং';
  document.querySelectorAll('#tabs button, .bar button, .tile b, .hm-hero .mu, .hm-hero h2, .due-card .mu, .hm-next .mu, .hm-next b, .t-sech span:first-child, details summary b').forEach(function(el){
+  if(el.id==='langbtn'||el.id==='themebtn'||el.id==='fsbtn'||el.id==='notifbtn')return;
   var t=el.textContent.trim();
-  if(BN[t])el.textContent=BN[t];
+  if(_lang==='bn'){if(BN[t])el.textContent=BN[t]}
+  else{if(BN_REV[t])el.textContent=BN_REV[t]}
  });
 }
 
