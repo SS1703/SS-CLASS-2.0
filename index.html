@@ -459,7 +459,7 @@ html{scroll-behavior:auto!important}
 
 #tabs,.bar,#topbtn{transform:translateZ(0);will-change:transform}
 #view{will-change:transform,opacity;transform:translateZ(0)}
-#view .c,#view .srow{contain:layout style;content-visibility:auto;contain-intrinsic-size:auto 88px}
+#view .c,#view .srow{contain:layout style}
 .tile{contain:layout style;transform:translateZ(0)}
 .c,.tile,button,.srow{transition:transform .09s cubic-bezier(.16,1,.3,1)!important}
 @keyframes fastIn{from{opacity:.5;transform:translate3d(0,8px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
@@ -587,7 +587,9 @@ function start(){resetLoginBtns();fade($('app'));var hl=document.querySelector('
  $('tabs').classList.toggle('many',t.length>6);
  if($('notifbtn'))$('notifbtn').classList.toggle('hide',!isT);go('home');applyLang();updateNet();updateNotifBadge();if(!isT)trackStart()}
 function logout(){auth.signOut()}
-function go(t){if(t!==tab&&navigator.vibrate)try{navigator.vibrate(8)}catch(e){}payOpen=false;idCardOpen=false;subPage='';if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},125);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest'})});render()}
+var _inPop=false;
+function pushNav(){if(!_inPop)try{history.pushState({ss:1},'')}catch(e){}}
+function go(t,fromPop){if(t!==tab&&!fromPop)pushNav();if(t!==tab&&navigator.vibrate)try{navigator.vibrate(8)}catch(e){}payOpen=false;idCardOpen=false;subPage='';if(t==='mat')matKind=null;if(t==='stu'&&tab==='stu')selStu=null;if(t==='fee'&&tab==='fee')remOpen=false;if(t!==tab)window.scrollTo(0,0);tab=t;$('view').classList.add('anim');setTimeout(function(){$('view').classList.remove('anim')},125);Array.prototype.forEach.call($('tabs').children,function(b){b.classList.toggle('on',b.dataset.t===t);if(b.dataset.t===t&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest'})});render()}
 function mine(a){return isT?a:a.filter(function(x){return x.cls===me.cls})}
 function sorted(a,k,d){return a.slice().sort(function(x,y){return d*String(x[k]||'').localeCompare(String(y[k]||''))})}
 async function del(col,id){if(await uiConfirm('Delete this item?'))fs.collection(col).doc(id).delete()}
@@ -718,7 +720,7 @@ function upiPayBlock(i){
 /* ---- quick pay: tap the Total due card on Home to pay everything at once ---- */
 var payOpen=false;
 function toPay(){return items(me).filter(function(i){return st(i.k,i.a)===0&&i.a>0})}
-function openPay(){if(!toPay().length){go('fee');return}payOpen=true;render();window.scrollTo(0,0)}
+function openPay(){if(!toPay().length){go('fee');return}pushNav();payOpen=true;render();window.scrollTo(0,0)}
 function closePay(){payOpen=false;render();window.scrollTo(0,0)}
 function payAllView(){
  var p=toPay().sort(function(a,b){return a.sk<b.sk?-1:1}),t=sum(p),w=sum(items(me).filter(function(i){return st(i.k,i.a)===1}));
@@ -896,7 +898,7 @@ function stuRows(){
  return ch+a.map(function(s){return '<div class="c srow" onclick="openStu(\''+s._id+'\')"><div class="av">'+initial(s.name)+'</div><div class="si"><b>'+esc(s.name)+'</b><span class="mu">Class '+esc(s.cls)+' · '+esc(s._id)+'</span></div>'+chipDue(dueOf(s))+'<span class="mu">›</span></div>'}).join('')}
 function renderStuList(){var e=$('stulist');if(e)e.innerHTML=stuRows()}
 function setC(c){stuC=c;renderStuList()}
-function openStu(id,t){selStu=id;selTab=t||'profile';if(tab!=='stu')go('stu');else{render();window.scrollTo(0,0)}}
+function openStu(id,t){if(!selStu)pushNav();selStu=id;selTab=t||'profile';if(tab!=='stu')go('stu');else{render();window.scrollTo(0,0)}}
 function backStu(){selStu=null;render();window.scrollTo(0,0)}
 function setSel(t){selTab=t;render()}
 function stuView(){
@@ -1102,7 +1104,7 @@ async function submitTest(auto){if(!qz)return;var t=qz.t,key=qz.key,n=qz.ans.fil
  try{await withTimeout(fs.collection('attempts').doc(key).update({ans:ans,submitted:true,submittedAt:firebase.firestore.FieldValue.serverTimestamp()}),15000);qz=null;render();window.scrollTo(0,0)}
  catch(e){alert(e&&e.timeout?'Submit is taking long. Your answers are kept on this screen. Keep the page open and tap Submit again when your internet is back.':'Could not submit. Check your internet and tap Submit again.')}}
 function withTimeout(p,ms){return Promise.race([p,new Promise(function(_,rej){setTimeout(function(){var e=new Error('timeout');e.timeout=true;rej(e)},ms)})])}
-function reviewTest(id){var t=allTests().find(function(x){return x._id===id}),r=S.results.find(function(x){return x._id===id+'_'+me._id});if(t&&r){rv={t:t,rec:r};render();window.scrollTo(0,0)}}
+function reviewTest(id){pushNav();var t=allTests().find(function(x){return x._id===id}),r=S.results.find(function(x){return x._id===id+'_'+me._id});if(t&&r){rv={t:t,rec:r};render();window.scrollTo(0,0)}}
 function leaveReview(){rv=null;render()}
 function testsStudent(){
  if(qz)return quizView();if(rv)return reviewView();
@@ -1142,7 +1144,7 @@ function toRemind(){return S.students.map(function(s){var p=items(s).filter(func
 function sentRec(sid){return S.reminders.find(function(x){return x._id===sid+'_'+curM()})}
 function remCard(){var l=toRemind();if(!l.length)return '';var n=l.filter(function(r){return sentRec(r.s._id)}).length;
  return '<div class="c" style="margin-top:10px"><div class="row"><div><b>Monthly reminders</b><br><span class="mu">'+n+' of '+l.length+' reminded for '+esc(mName(curM()))+'</span></div><button onclick="openRem()">Remind all</button></div><div class="t-pbar"><i style="width:'+Math.round(n/l.length*100)+'%"></i></div></div>'}
-function openRem(){remOpen=true;render();window.scrollTo(0,0)}
+function openRem(){pushNav();remOpen=true;render();window.scrollTo(0,0)}
 function closeRem(){remOpen=false;render();window.scrollTo(0,0)}
 async function markSent(sid,how){try{await fs.collection('reminders').doc(sid+'_'+curM()).set({sid:sid,month:curM(),how:how,ts:Date.now()})}catch(e){}}
 function remindNow(sid,how){var s=S.students.find(function(x){return x._id===sid});if(!s)return;
@@ -1212,7 +1214,7 @@ async function changeMyPw(){var a=$('np1').value,b=$('np2').value;
 var matKind=null,matSub='';
 var MATK={hand:'Handwritten notes',typed:'Typed notes',other:'Question papers & tests'};
 function matKindOf(x){var t=String(x.type||'');return t==='Handwritten notes'?'hand':(t==='Typed notes'||t==='Notes'||!t)?'typed':'other'}
-function setMat(k){matKind=k;matSub='';render();window.scrollTo(0,0)}
+function setMat(k){if(k&&!matKind)pushNav();matKind=k;matSub='';render();window.scrollTo(0,0)}
 function setSub(v){matSub=v;render()}
 function matForm(){var d=matKind==='hand'?0:matKind==='other'?2:1,o=['Handwritten notes','Typed notes','Question Paper','Test'];
  return form('Add Material',[['subject','Subject'],['title','Title'],['link','PDF / Drive link, or upload below']],'mat','<label class="t-lb">Type</label><select id="f_type">'+o.map(function(x,i){return '<option'+(i===d?' selected':'')+'>'+x+'</option>'}).join('')+'</select><div class="mu" style="margin-top:8px">Or upload a file from this device (PDF or photo)</div><input id="f_file" type="file" accept=".pdf,image/*,video/*"><div id="f_prog" class="mu"></div>')}
@@ -1284,6 +1286,7 @@ function setWatermark(){
  w.innerHTML=Array(12).fill('<span>'+esc(label)+'</span>').join('');
 }
 function openViewerShell(title){
+ pushNav();
  _vOpen=true;$('vtitle').textContent=title||'Viewer';$('vstage').innerHTML='<p class="mu">Loading...</p>';
  setWatermark();$('viewer').classList.remove('shielded');$('viewer').classList.add('on');
 }
@@ -1373,7 +1376,7 @@ async function openMat(id){
 }
 
 /* ---- student ID card ---- */
-function openIdCard(){if(isT)return;idCardOpen=true;render();window.scrollTo(0,0);setTimeout(drawIdCard,20)}
+function openIdCard(){if(isT)return;pushNav();idCardOpen=true;render();window.scrollTo(0,0);setTimeout(drawIdCard,20)}
 function closeIdCard(){idCardOpen=false;render();window.scrollTo(0,0)}
 function getIdPhoto(){try{return localStorage.getItem('idphoto_'+me._id)||''}catch(e){return ''}}
 function setIdPhoto(inp){
@@ -1908,6 +1911,24 @@ function notifView(){
    '<div class="card-acts">'+(c.p.ss?'<button class="s" onclick="openSs(\''+qa(safe(c.p.ss))+'\',\''+qa(c.name)+'\')">View SS</button>':'')+'<button onclick="okPay(\''+c.p._id+'\')">Confirm ₹'+inr(c.p.appDiscount?appAmt(c.amt):c.amt)+'</button><button class="s" onclick="rejectPay(\''+c.p._id+'\')">Reject</button>'+(c.s?'<button class="s" onclick="openStu(\''+c.s._id+'\',\'pay\')">Profile</button>':'')+'</div></div>';
  }).join('');
 }
+
+
+/* ---- in-app back button navigation (Android WebView & PWA) ---- */
+window.addEventListener('popstate',function(){
+ _inPop=true;
+ try{
+  if(_vOpen){closeViewer()}
+  else if($('dlg')&&$('dlg').style.display==='flex'){$('dlg-no').click()}
+  else if($('modal')&&$('modal').classList.contains('on')){$('mok').click()}
+  else if(payOpen){closePay()}
+  else if(idCardOpen){closeIdCard()}
+  else if(remOpen){closeRem()}
+  else if(selStu){backStu()}
+  else if(tab==='mat'&&matKind){setMat(null)}
+  else if(rv){leaveReview()}
+  else if(tab!=='home'){go('home',true)}
+ }finally{_inPop=false}
+});
 
 function render(){
  var h=pushCard(tab==='home');
