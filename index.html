@@ -658,33 +658,56 @@ function receiptOf(k){
  if(!s||!it||!ok){alert('Receipt not found');return}
  var rn='SS-'+k.replace(/[^A-Za-z0-9]+/g,'-').toUpperCase()+'-'+String(ok.ts).slice(-5);
  var when=new Date(ok.ts).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
- var lg=document.querySelector('.hero .logo'),logo=lg?lg.src:'';
  var rcv=(cfg().name||'SS Class');
- var html='<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Receipt '+esc(rn)+'</title><style>'+
- 'body{font-family:Arial,"Hind Siliguri",sans-serif;background:#faf6ea;color:#1f1709;margin:0;padding:24px}'+
- '.r{max-width:560px;margin:auto;background:#fffdf8;border:1px solid #d9c9a3;border-radius:16px;padding:28px;box-shadow:0 10px 30px -18px rgba(120,88,28,.4)}'+
- '.hd{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #c58f25;padding-bottom:14px}'+
- '.hd img{width:64px;height:64px;object-fit:contain}.t{font-size:22px;font-weight:700;letter-spacing:.04em;color:#6e4a0c}'+
- '.badge{display:inline-block;background:#2e7d52;color:#fff;border-radius:99px;padding:4px 14px;font-size:13px;font-weight:700;margin-top:6px}'+
- 'table{width:100%;border-collapse:collapse;margin-top:18px}td{padding:10px 4px;border-bottom:1px solid #eadfc4}td:last-child{text-align:right;font-weight:700}'+
- '.tot td{font-size:18px;border-bottom:0;color:#6e4a0c}.ft{margin-top:22px;font-size:12px;color:#7d7257;text-align:center}'+
- '.np{text-align:center;margin-top:18px}.np button{background:#c58f25;color:#1b1306;border:0;border-radius:12px;padding:12px 22px;font-weight:700;cursor:pointer}'+
- '@media print{.np{display:none}body{background:#fff;padding:0}.r{box-shadow:none;border-color:#ccc}}</style></head><body><div class="r">'+
- '<div class="hd"><div><div class="t">PAYMENT RECEIPT</div><div class="badge">PAID</div></div>'+(logo?'<img src="'+logo+'" alt="">':'')+'</div>'+
- '<table>'+
- '<tr><td>Receipt no.</td><td>'+esc(rn)+'</td></tr>'+
- '<tr><td>Date</td><td>'+esc(when)+'</td></tr>'+
- '<tr><td>Student</td><td>'+esc(s.name)+'</td></tr>'+
- '<tr><td>Student ID</td><td>'+esc(s._id)+'</td></tr>'+
- '<tr><td>Class</td><td>'+esc(s.cls)+'</td></tr>'+
- '<tr><td>Payment for</td><td>'+esc(it.t)+'</td></tr>'+
- '<tr class="tot"><td>Amount paid</td><td>Rs '+esc(it.a)+'</td></tr>'+
- '</table>'+
- '<div class="ft">Received by '+esc(rcv)+'<br>This is a computer generated receipt.</div>'+
- '</div><div class="np"><button onclick="window.print()">Print / Save as PDF</button></div></body></html>';
- var w=window.open('','_blank');
- if(!w){alert('Popup was blocked. Please allow popups in your browser.');return}
- w.document.write(html);w.document.close();
+ openViewerShell('Receipt · '+rn);
+ var stg=$('vstage');
+ stg.innerHTML='<canvas id="rcpt-cv" width="840" height="980" style="max-width:440px;border-radius:18px"></canvas>'+
+  '<div class="t-two" style="width:100%;max-width:440px;margin-top:4px">'+
+  '<button onclick="dlReceipt(\''+qa(rn)+'\')">Download (PNG)</button>'+
+  '<button class="s" onclick="shareReceipt(\''+qa(rn)+'\')">Share</button></div>';
+ setTimeout(function(){
+  var cv=$('rcpt-cv');if(!cv)return;
+  var ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  ctx.fillStyle='#fffdf8';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#d9c9a3';ctx.lineWidth=4;ctx.strokeRect(18,18,W-36,H-36);
+  ctx.fillStyle='#1f2a44';ctx.fillRect(18,18,W-36,154);
+  ctx.fillStyle='#d8b872';ctx.fillRect(18,168,W-36,6);
+  var lg=document.querySelector('.hero .logo');
+  if(lg&&lg.complete){try{ctx.drawImage(lg,W-148,40,100,100)}catch(e){}}
+  ctx.fillStyle='#fbf7ee';ctx.font='bold 34px Fraunces, Georgia, serif';
+  ctx.fillText('PAYMENT RECEIPT',54,84);
+  ctx.fillStyle='#2e7d52';ctx.beginPath();ctx.roundRect(54,104,110,38,19);ctx.fill();
+  ctx.fillStyle='#ffffff';ctx.font='bold 20px Manrope, sans-serif';
+  ctx.fillText('PAID',84,130);
+  var rows=[['Receipt No.',rn],['Date',when],['Student',s.name],['Student ID',s._id],['Class',s.cls],['Payment For',it.t]];
+  var y=250;
+  rows.forEach(function(r){
+   ctx.fillStyle='#666b75';ctx.font='600 23px Manrope, sans-serif';ctx.fillText(r[0],54,y);
+   ctx.fillStyle='#1f2430';ctx.font='bold 24px Manrope, sans-serif';ctx.textAlign='right';ctx.fillText(String(r[1]),W-54,y);
+   ctx.textAlign='left';
+   ctx.strokeStyle='#eadfc4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(54,y+24);ctx.lineTo(W-54,y+24);ctx.stroke();
+   y+=84;
+  });
+  ctx.fillStyle='#f7f3ea';ctx.fillRect(44,y+6,W-88,92);
+  ctx.fillStyle='#7a5a1f';ctx.font='bold 28px Fraunces, Georgia, serif';ctx.fillText('Amount Paid',64,y+62);
+  ctx.textAlign='right';ctx.font='bold 34px Fraunces, Georgia, serif';ctx.fillText('Rs '+inr(it.a),W-64,y+64);
+  ctx.textAlign='center';ctx.fillStyle='#666b75';ctx.font='500 20px Manrope, sans-serif';
+  ctx.fillText('Received by '+rcv,W/2,H-96);
+  ctx.fillText('This is a computer generated receipt.',W/2,H-62);
+ },20);
+}
+function dlReceipt(rn){
+ var cv=$('rcpt-cv');if(!cv)return;
+ var a=document.createElement('a');a.download=rn+'.png';a.href=cv.toDataURL('image/png');a.click();
+}
+function shareReceipt(rn){
+ var cv=$('rcpt-cv');if(!cv)return;
+ if(!navigator.share){dlReceipt(rn);return}
+ cv.toBlob(function(blob){
+  if(!blob){dlReceipt(rn);return}
+  var file=new File([blob],rn+'.png',{type:'image/png'});
+  navigator.share({title:'Payment Receipt '+rn,files:[file]}).catch(function(){dlReceipt(rn)});
+ });
 }
 function upiLinks(amt,note){
  var q='pa='+encodeURIComponent(upiId())+'&pn='+encodeURIComponent(upiName()||'Teacher')+'&am='+encodeURIComponent(amt)+'&cu=INR&tn='+encodeURIComponent(note);
