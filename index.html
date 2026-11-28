@@ -1914,21 +1914,23 @@ function notifView(){
 
 
 /* ---- in-app back button navigation (Android WebView & PWA) ---- */
-window.addEventListener('popstate',function(){
+window.ssBack=function(){
  _inPop=true;
  try{
-  if(_vOpen){closeViewer()}
-  else if($('dlg')&&$('dlg').style.display==='flex'){$('dlg-no').click()}
-  else if($('modal')&&$('modal').classList.contains('on')){$('mok').click()}
-  else if(payOpen){closePay()}
-  else if(idCardOpen){closeIdCard()}
-  else if(remOpen){closeRem()}
-  else if(selStu){backStu()}
-  else if(tab==='mat'&&matKind){setMat(null)}
-  else if(rv){leaveReview()}
-  else if(tab!=='home'){go('home',true)}
+  if(_vOpen){closeViewer();return '1'}
+  if($('dlg')&&$('dlg').style.display==='flex'){$('dlg-no').click();return '1'}
+  if($('modal')&&$('modal').classList.contains('on')&&$('mok')){$('mok').click();return '1'}
+  if(payOpen){closePay();return '1'}
+  if(idCardOpen){closeIdCard();return '1'}
+  if(remOpen){closeRem();return '1'}
+  if(selStu){backStu();return '1'}
+  if(tab==='mat'&&matKind){setMat(null);return '1'}
+  if(rv){leaveReview();return '1'}
+  if(tab!=='home'){go('home',true);return '1'}
+  return '0';
  }finally{_inPop=false}
-});
+};
+window.addEventListener('popstate',function(){window.ssBack()});
 
 function render(){
  var h=pushCard(tab==='home');
